@@ -6,7 +6,7 @@ A simple, in-memory command-line todo application built with Python 3.13+ follow
 
 This is a menu-driven CLI application for managing todo tasks during a single session. All data is stored in memory and is cleared when the application exits (no persistence).
 
-**Features:**
+**Core Features:**
 - ✅ Add tasks with title and optional description
 - ✅ View all tasks with ID, title, and completion status
 - ✅ Search tasks by keyword (title or description)
@@ -17,6 +17,19 @@ This is a menu-driven CLI application for managing todo tasks during a single se
 - ✅ Toggle task completion status (Pending ↔ Completed)
 - ✅ Graceful error handling
 - ✅ Clean, menu-driven interface
+
+**Advanced Task Management Features (Feature 003):**
+- ✅ **Priority Levels**: Assign high/medium/low priority to tasks
+- ✅ **Tags/Categories**: Organize tasks with multiple tags
+- ✅ **Due Dates**: Set deadlines with automatic overdue detection
+- ✅ **Recurring Tasks**: Daily/weekly/monthly task recurrence
+- ✅ **Filter by Priority**: View tasks by priority level
+- ✅ **Filter by Tags**: Find tasks with specific tags
+- ✅ **View Overdue Tasks**: Dedicated view for overdue items
+- ✅ **Sort by Priority**: Organize by importance
+- ✅ **Sort by Due Date**: Arrange by deadline
+- ✅ **Overdue Warnings**: Menu displays overdue task count
+- ✅ **Overdue Indicators**: Visual markers for overdue tasks
 
 ## Requirements
 
@@ -59,9 +72,12 @@ You'll see a numbered menu:
 5. Mark Task Complete/Incomplete
 6. Search/Filter Tasks
 7. Sort Tasks
-8. Exit
+8. Filter by Priority
+9. Filter by Tags
+10. View Overdue Tasks
+11. Exit
 
-Enter your choice (1-8): _
+Enter your choice (1-11): _
 ```
 
 **Example Workflow:**
@@ -69,24 +85,38 @@ Enter your choice (1-8): _
 1. Select `1` to add a task
    - Enter title: "Buy groceries"
    - Enter description (or press Enter to skip)
+   - Set priority: high/medium/low (or skip)
+   - Add tags: "errands,home" (comma-separated, or skip)
+   - Set due date: YYYY-MM-DD format (or skip)
+   - Set recurrence: daily/weekly/monthly (only if due date set, or skip)
 
 2. Select `2` to view all tasks
-   - See your task list with IDs and statuses
+   - See your task list with IDs, statuses, priorities, tags, and due dates
+   - Overdue tasks show [OVERDUE X days] indicator
+   - Tasks due today show [DUE TODAY] indicator
 
-3. Select `6` to search/filter tasks
-   - Enter keyword: "buy" (or press Enter to skip)
-   - Choose filter: Pending only, Completed only, or All
-   - See matching tasks
+3. Select `8` to filter by priority
+   - Choose high/medium/low
+   - See only tasks with that priority level
 
-4. Select `7` to sort tasks
-   - Choose sort: by ID, Title, or Status
+4. Select `9` to filter by tags
+   - Enter tag name
+   - See all tasks with that tag
+
+5. Select `10` to view overdue tasks
+   - See all tasks past their due date
+   - Shows days overdue for each task
+
+6. Select `7` to sort tasks
+   - Choose sort: by ID, Title, Status, Priority, or Due Date
    - See tasks in sorted order
 
-5. Select `5` to mark a task complete
+7. Select `5` to mark a recurring task complete
    - Enter task ID
-   - Status toggles between Pending and Completed
+   - Status toggles to Completed
+   - If recurring, new instance created automatically with next due date
 
-6. Select `8` to exit
+8. Select `11` to exit
    - All data is cleared (no persistence)
 
 ## Project Structure
@@ -142,6 +172,10 @@ This project follows **Spec-Driven Development (SDD)** as defined in `.specify/m
 - **Title**: Required, non-empty string
 - **Description**: Optional string
 - **Completed**: Boolean (default: False)
+- **Priority**: Optional ('high', 'medium', 'low', or None)
+- **Tags**: Optional list of strings for categorization
+- **Due Date**: Optional datetime.date for deadlines
+- **Recurrence**: Optional ('daily', 'weekly', 'monthly', or None)
 
 ## Validation
 
@@ -153,16 +187,14 @@ All operations include input validation:
 
 ## Limitations (By Design)
 
-This is Phase I - intentionally simple and focused:
+Phase I with advanced task management features - intentionally simple and focused:
 
 - ❌ **No Persistence**: Data lost on exit (in-memory only)
 - ❌ **No Database**: Uses Python lists and dictionaries
 - ❌ **No GUI**: Command-line interface only
-- ❌ **No External Dependencies**: Standard library only
+- ❌ **No External Dependencies**: Standard library only (datetime module)
 - ❌ **Single User**: No multi-user support
-- ❌ **No Search/Filter**: View shows all tasks
-- ❌ **No Due Dates**: Tasks have no time-based features
-- ❌ **No Categories/Tags**: Simple flat task list
+- ❌ **No Automated Tests**: Manual testing only per constitutional constraints
 
 ## Development
 
@@ -181,26 +213,36 @@ Manual testing against acceptance scenarios from `specs/001-todo-app/spec.md`:
 - All scenarios validated manually
 - Independent test criteria for each user story
 
-### Future Phases
+### Current Implementation Status
 
-Phase I is intentionally minimal. Future phases may include:
+**Completed Features:**
+- ✅ Feature 001: Core todo app functionality
+- ✅ Feature 002: Search, filter, and sort capabilities
+- ✅ Feature 003: Advanced task management (priorities, tags, due dates, recurring tasks)
+
+**Future Phases**
+
+Future enhancements may include:
 - Persistent storage (database or file system)
-- Task prioritization and categorization
-- Due dates and reminders
-- Search and filtering
+- Email/SMS reminders for due dates
+- Calendar integration
 - Web or GUI interface
-- Multi-user support
+- Multi-user support and collaboration
+- Task dependencies and subtasks
 
 ## Documentation
 
-Comprehensive SDD documentation available in `specs/001-todo-app/`:
+Comprehensive SDD documentation available in `specs/`:
 
-- **spec.md**: Complete feature specification with user stories and requirements
-- **plan.md**: Implementation plan with architecture decisions
-- **data-model.md**: Detailed entity structure and validation rules
-- **tasks.md**: Complete task breakdown (31 tasks)
-- **quickstart.md**: Developer quickstart guide
-- **contracts/cli-interface.md**: Complete CLI specification
+**Feature 001 - Core Todo App** (`specs/001-todo-app/`):
+- spec.md, plan.md, data-model.md, tasks.md, quickstart.md, contracts/
+
+**Feature 002 - Search/Filter/Sort** (`specs/002-search-filter-sort/`):
+- spec.md, plan.md, data-model.md, tasks.md, quickstart.md, contracts/
+
+**Feature 003 - Advanced Task Management** (`specs/003-advanced-task-mgmt/`):
+- spec.md, plan.md, data-model.md, tasks.md, quickstart.md, contracts/
+- 8 user stories: priorities, tags, due dates, filtering, overdue view, sorting, recurring tasks, menu warnings
 
 ## License
 

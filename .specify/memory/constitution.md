@@ -2,16 +2,16 @@
 
 <!--
 Sync Impact Report:
-- Version change: 1.0.0 → 1.1.0
-- Amendment: Principle V updated to allow controlled feature enhancement through SDD workflow
-- Principles affected: Principle V (renamed and expanded)
-- New section added: Amendment History
+- Version change: 1.1.0 → 1.2.0
+- Amendment: Extended Task Entity Rules to support advanced task management features
+- Sections affected: Task Entity Rules (added Extended Attributes subsection)
+- New attributes added: priority, tags, due_date, recurrence
 - Templates requiring updates:
   ✅ .specify/templates/plan-template.md (reviewed - no changes needed)
   ✅ .specify/templates/spec-template.md (reviewed - no changes needed)
   ✅ .specify/templates/tasks-template.md (reviewed - no changes needed)
 - Follow-up TODOs: None
-- Impact: Feature 002 (search/filter/sort) can now proceed with constitutional compliance
+- Impact: Feature 003 (priorities, tags, due dates, recurring tasks) can now proceed with constitutional compliance
 -->
 
 ## Purpose
@@ -98,12 +98,19 @@ This project maintains strict scope discipline. New features may be added ONLY t
 
 Each Todo task MUST contain the following attributes:
 
+### Core Attributes (Required for all tasks):
 - **id:** Integer, auto-incremented, unique, immutable
 - **title:** String, required, non-empty
 - **description:** String, optional (may be empty or None)
 - **completed:** Boolean, default is False
 
-No additional attributes may be added without explicit approval.
+### Extended Attributes (Added via Feature 003):
+- **priority:** String, optional - one of 'high', 'medium', 'low', or None (default)
+- **tags:** List of strings, optional - categories like 'work', 'home', 'personal'
+- **due_date:** datetime object, optional - deadline for task completion
+- **recurrence:** String, optional - recurrence pattern ('daily', 'weekly', 'monthly', or None)
+
+Additional attributes may be added through proper SDD workflow with constitutional compliance verification.
 
 ## CLI Behavior Rules
 
@@ -138,9 +145,27 @@ This constitution supersedes all other development practices. Any amendments to 
 - Version must be incremented according to semantic versioning
 - All dependent templates and documentation must be updated to reflect amendments
 
-**Version:** 1.1.0 | **Ratified:** 2026-01-03 | **Last Amended:** 2026-01-03
+**Version:** 1.2.0 | **Ratified:** 2026-01-03 | **Last Amended:** 2026-01-04
 
 ## Amendment History
+
+### Version 1.2.0 (2026-01-04)
+
+**Amendment:** Extended Task Entity Rules to support advanced task management features
+
+**Rationale:** Enable organizational and productivity features (priorities, tags, due dates, recurring tasks) while maintaining CLI-only and in-memory constraints. These extensions provide practical task management capabilities without introducing external dependencies or persistence requirements.
+
+**Changes:**
+- Added Extended Attributes subsection to Task Entity Rules
+- Added four new optional task attributes:
+  - **priority**: String ('high', 'medium', 'low', or None) for task prioritization
+  - **tags**: List of strings for categorization (e.g., 'work', 'home', 'personal')
+  - **due_date**: datetime object for deadline tracking
+  - **recurrence**: String pattern ('daily', 'weekly', 'monthly', or None) for repeating tasks
+- All new attributes are optional to maintain backward compatibility
+- All new attributes use Python standard library types (str, list, datetime)
+
+**Impact:** Enables Feature 003 (advanced task management) to proceed with constitutional compliance. Application can now support task organization, time management, and recurring workflows while maintaining Phase I architectural principles.
 
 ### Version 1.1.0 (2026-01-03)
 
