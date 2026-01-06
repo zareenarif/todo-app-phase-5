@@ -44,7 +44,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Welcome Header */}
-          <div className="mb-12 text-center">
+          <div className="mb-12 text-center animate-fade-in-down">
             <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-4">
               Welcome Back! 👋
             </h1>
@@ -58,7 +58,7 @@ export default function DashboardPage() {
             {/* View Tasks Card */}
             <Link
               href="/tasks"
-              className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-white transform hover:scale-105 hover:-translate-y-2"
+              className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-white transform hover:scale-105 hover:-translate-y-2 animate-fade-in-up"
             >
               <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">📋</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">
@@ -76,7 +76,8 @@ export default function DashboardPage() {
             {/* Create Task Card */}
             <Link
               href="/tasks"
-              className="group bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-white/20 transform hover:scale-105 hover:-translate-y-2"
+              className="group bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-white/20 transform hover:scale-105 hover:-translate-y-2 animate-fade-in-up"
+              style={{ animationDelay: '100ms' }}
             >
               <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">➕</div>
               <h3 className="text-2xl font-bold text-white mb-3">
@@ -92,7 +93,7 @@ export default function DashboardPage() {
             </Link>
 
             {/* Statistics Card - Coming Soon */}
-            <div className="relative bg-white/40 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/50 overflow-hidden">
+            <div className="relative bg-white/40 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/50 overflow-hidden animate-fade-in-up" style={{ animationDelay: '200ms' }}>
               <div className="absolute top-4 right-4">
                 <span className="px-3 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full">
                   Coming Soon
@@ -109,7 +110,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Feature Highlights */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white animate-scale-in" style={{ animationDelay: '300ms' }}>
             <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
               ✨ Powerful Features
             </h2>
@@ -160,7 +161,7 @@ export default function DashboardPage() {
           {/* Quick Stats Preview */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Total Tasks */}
-            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
               <div className="text-5xl mb-2">📊</div>
               <p className="text-sm font-medium opacity-90">Total Tasks</p>
               <p className="text-5xl font-extrabold">
@@ -169,7 +170,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Completed Tasks */}
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 animate-fade-in-up" style={{ animationDelay: '500ms' }}>
               <div className="text-5xl mb-2">✅</div>
               <p className="text-sm font-medium opacity-90">Completed</p>
               <p className="text-5xl font-extrabold">
@@ -183,7 +184,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Pending Tasks */}
-            <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 animate-fade-in-up" style={{ animationDelay: '600ms' }}>
               <div className="text-5xl mb-2">⏳</div>
               <p className="text-sm font-medium opacity-90">Pending</p>
               <p className="text-5xl font-extrabold">
@@ -197,7 +198,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Overdue Tasks */}
-            <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 animate-fade-in-up" style={{ animationDelay: '700ms' }}>
               <div className="text-5xl mb-2">⚠️</div>
               <p className="text-sm font-medium opacity-90">Overdue</p>
               <p className="text-5xl font-extrabold">
@@ -211,8 +212,8 @@ export default function DashboardPage() {
 
           {/* Quick Action Reminder */}
           {!loading && totalTasks === 0 && (
-            <div className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-8 text-center text-white">
-              <div className="text-6xl mb-4">🚀</div>
+            <div className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-8 text-center text-white animate-scale-in" style={{ animationDelay: '800ms' }}>
+              <div className="text-6xl mb-4 animate-bounce-in">🚀</div>
               <h3 className="text-2xl font-bold mb-2">Ready to Get Started?</h3>
               <p className="text-lg mb-6 opacity-90">Create your first task and start being productive!</p>
               <Link
