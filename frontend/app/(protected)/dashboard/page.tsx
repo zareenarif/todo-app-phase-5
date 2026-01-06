@@ -5,10 +5,40 @@
 
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AuthGuard from '@/components/auth/AuthGuard';
+import { listTasks } from '@/lib/api';
+import { Task } from '@/lib/types';
 
 export default function DashboardPage() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch tasks for statistics
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const fetchedTasks = await listTasks();
+        setTasks(fetchedTasks);
+      } catch (error) {
+        console.error('Failed to fetch tasks:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  // Calculate statistics
+  const completedTasks = tasks.filter(task => task.completed).length;
+  const pendingTasks = tasks.filter(task => !task.completed).length;
+  const totalTasks = tasks.length;
+  const overdueTasks = tasks.filter(task =>
+    !task.completed && task.due_date && new Date(task.due_date) < new Date()
+  ).length;
+
   return (
     <AuthGuard>
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
@@ -128,23 +158,71 @@ export default function DashboardPage() {
           </div>
 
           {/* Quick Stats Preview */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-6 text-white">
-              <div className="text-4xl mb-2">✅</div>
-              <p className="text-sm font-medium opacity-90">Tasks Completed</p>
-              <p className="text-4xl font-bold">Coming Soon</p>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+            {/* Total Tasks */}
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+              <div className="text-5xl mb-2">📊</div>
+              <p className="text-sm font-medium opacity-90">Total Tasks</p>
+              <p className="text-5xl font-extrabold">
+                {loading ? '...' : totalTasks}
+              </p>
             </div>
-            <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white">
-              <div className="text-4xl mb-2">⏳</div>
-              <p className="text-sm font-medium opacity-90">Tasks Pending</p>
-              <p className="text-4xl font-bold">Coming Soon</p>
+
+            {/* Completed Tasks */}
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+              <div className="text-5xl mb-2">✅</div>
+              <p className="text-sm font-medium opacity-90">Completed</p>
+              <p className="text-5xl font-extrabold">
+                {loading ? '...' : completedTasks}
+              </p>
+              {!loading && totalTasks > 0 && (
+                <p className="text-xs opacity-75 mt-1">
+                  {Math.round((completedTasks / totalTasks) * 100)}% done
+                </p>
+              )}
             </div>
-            <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white">
-              <div className="text-4xl mb-2">🔥</div>
-              <p className="text-sm font-medium opacity-90">Current Streak</p>
-              <p className="text-4xl font-bold">Coming Soon</p>
+
+            {/* Pending Tasks */}
+            <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+              <div className="text-5xl mb-2">⏳</div>
+              <p className="text-sm font-medium opacity-90">Pending</p>
+              <p className="text-5xl font-extrabold">
+                {loading ? '...' : pendingTasks}
+              </p>
+              {!loading && totalTasks > 0 && (
+                <p className="text-xs opacity-75 mt-1">
+                  {Math.round((pendingTasks / totalTasks) * 100)}% remaining
+                </p>
+              )}
+            </div>
+
+            {/* Overdue Tasks */}
+            <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+              <div className="text-5xl mb-2">⚠️</div>
+              <p className="text-sm font-medium opacity-90">Overdue</p>
+              <p className="text-5xl font-extrabold">
+                {loading ? '...' : overdueTasks}
+              </p>
+              {!loading && overdueTasks > 0 && (
+                <p className="text-xs opacity-75 mt-1">Need attention!</p>
+              )}
             </div>
           </div>
+
+          {/* Quick Action Reminder */}
+          {!loading && totalTasks === 0 && (
+            <div className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-8 text-center text-white">
+              <div className="text-6xl mb-4">🚀</div>
+              <h3 className="text-2xl font-bold mb-2">Ready to Get Started?</h3>
+              <p className="text-lg mb-6 opacity-90">Create your first task and start being productive!</p>
+              <Link
+                href="/tasks"
+                className="inline-block px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg"
+              >
+                Create Your First Task
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </AuthGuard>
