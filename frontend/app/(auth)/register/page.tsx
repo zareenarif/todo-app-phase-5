@@ -8,6 +8,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { register as registerUser } from '@/lib/auth-api';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -40,17 +41,11 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      // TODO: Replace with actual Better Auth registration
-      // For now, this is a placeholder that demonstrates the expected flow
-      // In actual implementation:
-      // const result = await signUp({ email, password });
-      // if (result.success) { ... }
+      // Call real register API
+      const response = await registerUser({ email, password });
 
-      // Placeholder: simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Store mock JWT (in actual implementation, Better Auth handles this)
-      localStorage.setItem('jwt_token', 'mock-jwt-token');
+      // Store JWT token
+      localStorage.setItem('jwt_token', response.access_token);
 
       // Redirect to dashboard
       router.push('/dashboard');

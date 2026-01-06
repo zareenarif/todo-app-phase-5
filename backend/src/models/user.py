@@ -12,13 +12,13 @@ from typing import Optional
 
 class User(SQLModel, table=True):
     """
-    User entity - managed by Better Auth.
-    This model is for reference only; Better Auth handles the actual schema.
+    User entity with authentication.
 
     Attributes:
         id: Unique user identifier (UUID)
         email: User's email address (unique)
         name: User's display name (optional)
+        password_hash: Hashed password for authentication
         created_at: Account creation timestamp
         updated_at: Last update timestamp
     """
@@ -29,5 +29,6 @@ class User(SQLModel, table=True):
     )
     email: str = Field(unique=True, index=True)
     name: Optional[str] = Field(default=None)
+    password_hash: str
     created_at: datetime
     updated_at: datetime
