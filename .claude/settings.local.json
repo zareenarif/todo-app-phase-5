@@ -76,7 +76,8 @@
       "Bash(__NEW_LINE_763f0d120865d319__ echo -e \"\\\\n=== Backend API Docs ===\")",
       "Bash(source:*)",
       "Bash(railway:*)",
-      "Bash(vercel --version:*)"
+      "Bash(vercel --version:*)",
+      "Bash(echo:*)"
     ]
   }
 }
