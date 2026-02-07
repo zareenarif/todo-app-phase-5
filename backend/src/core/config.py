@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     # LLM Configuration (Groq - free tier)
     GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "llama-3.1-70b-versatile"
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
 
     # Ollama Configuration (local fallback)
     OLLAMA_BASE_URL: str = "http://localhost:11434"

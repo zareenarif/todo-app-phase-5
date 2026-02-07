@@ -15,7 +15,7 @@ import {
   LLMHealthCheck,
 } from './types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-production-5055.up.railway.app/api/v1';
 
 /**
  * Get JWT token from storage (placeholder - actual implementation depends on Better Auth).
@@ -33,17 +33,15 @@ function getJWT(): string | null {
  * Handle API responses and errors.
  */
 async function handleResponse<T>(response: Response): Promise<T> {
-  if (response.status === 401) {
-    // Redirect to login on unauthorized
-    if (typeof window !== 'undefined') {
-      window.location.href = '/login';
-    }
-    throw new Error('Unauthorized');
-  }
-
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || 'An error occurred');
+    let detail = 'An error occurred';
+    try {
+      const error = await response.json();
+      detail = error.detail || detail;
+    } catch {
+      detail = `HTTP ${response.status}: ${response.statusText}`;
+    }
+    throw new Error(detail);
   }
 
   if (response.status === 204) {
@@ -61,13 +59,20 @@ async function handleResponse<T>(response: Response): Promise<T> {
  * Register a new user.
  */
 export async function register(email: string, password: string): Promise<{ access_token: string }> {
-  const response = await fetch(`${API_URL}/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-  });
+  const url = `${API_URL}/auth/register`;
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+  } catch (err: any) {
+    throw new Error(`Network error: Could not reach the server. URL: ${url} - ${err.message}`);
+  }
 
   const data = await handleResponse<{ access_token: string }>(response);
 
@@ -83,13 +88,20 @@ export async function register(email: string, password: string): Promise<{ acces
  * Login an existing user.
  */
 export async function login(email: string, password: string): Promise<{ access_token: string }> {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-  });
+  const url = `${API_URL}/auth/login`;
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+  } catch (err: any) {
+    throw new Error(`Network error: Could not reach the server. URL: ${url} - ${err.message}`);
+  }
 
   const data = await handleResponse<{ access_token: string }>(response);
 
