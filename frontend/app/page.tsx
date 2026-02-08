@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Logo from '@/components/ui/Logo';
 import {
@@ -54,12 +53,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen w-full bg-white dark:bg-gray-950">
       {/* Navigation */}
-      <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-xl dark:border-gray-800/50 dark:bg-gray-950/80"
-      >
+      <nav className="animate-fade-in-down sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-xl dark:border-gray-800/50 dark:bg-gray-950/80">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center">
@@ -78,55 +72,35 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Hero Section */}
       <section className="w-full px-4 pt-20 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full bg-purple-100 px-4 py-1.5 dark:bg-purple-900/30"
-            >
+            <div className="animate-fade-in-up mb-6 inline-flex items-center gap-2 rounded-full bg-purple-100 px-4 py-1.5 dark:bg-purple-900/30">
               <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
                 AI-Powered Productivity
               </span>
-            </motion.div>
+            </div>
 
             {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-6 text-4xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl"
-            >
+            <h1 className="animate-fade-in-up mb-6 text-4xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
               Organize your work,
               <br />
               <span className="text-gradient-hero">amplify your life</span>
-            </motion.h1>
+            </h1>
 
             {/* Subheadline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="mx-auto mb-10 max-w-2xl text-lg text-gray-600 dark:text-gray-400"
-            >
+            <p className="animate-fade-in-up mx-auto mb-10 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
               TaskFlow combines intelligent task management with AI assistance to
               help you focus on what matters most. Plan smarter, achieve more.
-            </motion.p>
+            </p>
 
             {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-col items-center justify-center gap-4 sm:flex-row"
-            >
+            <div className="animate-fade-in-up flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/register" className="btn-primary px-8 py-3 text-base">
                 Start Free Trial
                 <ArrowRight className="h-4 w-4" />
@@ -134,15 +108,10 @@ export default function HomePage() {
               <Link href="/login" className="btn-secondary px-8 py-3 text-base">
                 Sign In
               </Link>
-            </motion.div>
+            </div>
 
             {/* Social Proof */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400"
-            >
+            <div className="animate-fade-in mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
                   {[
@@ -173,16 +142,11 @@ export default function HomePage() {
                 ))}
                 <span className="ml-1">4.9/5 rating</span>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Dashboard Preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="relative mt-20"
-          >
+          <div className="animate-fade-in-up relative mt-20">
             <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900">
               {/* Browser Header */}
               <div className="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
@@ -243,20 +207,14 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
       <section className="w-full bg-gray-50/80 px-4 py-24 dark:bg-gray-900/50 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-16 text-center"
-          >
+          <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
               Everything you need to stay productive
             </h2>
@@ -264,16 +222,12 @@ export default function HomePage() {
               Powerful features designed to help you manage tasks efficiently and
               achieve your goals faster.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            {features.map((feature, index) => (
-              <motion.div
+            {features.map((feature) => (
+              <div
                 key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group rounded-2xl border border-gray-200 bg-white p-6 transition-all hover:border-purple-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-purple-800"
               >
                 <div
@@ -287,7 +241,7 @@ export default function HomePage() {
                 <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                   {feature.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -297,13 +251,9 @@ export default function HomePage() {
       <section className="w-full px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            {stats.map((stat, index) => (
-              <motion.div
+            {stats.map((stat) => (
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center"
               >
                 <div className="text-gradient mb-1 text-3xl font-bold">
@@ -312,7 +262,7 @@ export default function HomePage() {
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   {stat.label}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -321,12 +271,7 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="w-full px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="overflow-hidden rounded-3xl bg-gradient-to-br from-purple-600 via-violet-600 to-blue-600 p-12 text-center"
-          >
+          <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-purple-600 via-violet-600 to-blue-600 p-12 text-center">
             <h2 className="mb-4 text-3xl font-bold text-white">
               Ready to boost your productivity?
             </h2>
@@ -341,7 +286,7 @@ export default function HomePage() {
               Get Started Free
               <ArrowRight className="h-4 w-4" />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 

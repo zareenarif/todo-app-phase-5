@@ -11,12 +11,15 @@ The agent:
 Uses Groq's free OpenAI-compatible API as the LLM provider.
 """
 import json
+import logging
 from typing import Optional
 from dataclasses import dataclass, field
 from openai import AsyncOpenAI
 from agents import Agent, Runner, OpenAIChatCompletionsModel, function_tool
 from src.core.config import settings
 from src.mcp.tools import add_task, list_tasks, complete_task, delete_task, update_task
+
+logger = logging.getLogger(__name__)
 
 
 SYSTEM_PROMPT = """You are a helpful todo task management assistant. You help users manage their tasks through natural language conversation.
@@ -253,11 +256,31 @@ async def run_chat_agent(
         model=groq_model,
     )
 
-    # Run agent
-    result = await Runner.run(
-        agent,
-        input=history,
-    )
+    # Run agent with retry on transient errors
+    last_error = None
+    result = None
+    for attempt in range(3):
+        try:
+            result = await Runner.run(
+                agent,
+                input=history,
+            )
+            break
+        except Exception as e:
+            last_error = e
+            logger.warning(
+                "Agent run attempt %d failed: %s; filtered.input=%s",
+                attempt + 1,
+                str(e),
+                json.dumps(history, default=str),
+            )
+            if attempt < 2:
+                import asyncio
+                await asyncio.sleep(1 * (attempt + 1))
+
+    if result is None:
+        logger.error("Agent failed after 3 attempts: %s", str(last_error))
+        raise RuntimeError(f"LLM provider error: {last_error}")
 
     # Extract response and tool calls
     response_text = result.final_output or ""

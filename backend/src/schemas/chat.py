@@ -44,3 +44,32 @@ class ChatResponse(BaseModel):
         default_factory=list,
         description="List of MCP tool invocations made during this request",
     )
+
+
+class MessageRecord(BaseModel):
+    """A single message in a conversation."""
+    id: str
+    role: str = Field(description="user, assistant, or tool")
+    content: Optional[str] = None
+    tool_name: Optional[str] = None
+    tool_input: Optional[dict] = None
+    tool_output: Any = None
+    created_at: str
+
+
+class ConversationSummary(BaseModel):
+    """Summary of a conversation for listing."""
+    id: str
+    title: Optional[str] = None
+    created_at: str
+    updated_at: str
+    message_count: int = 0
+
+
+class ConversationDetail(BaseModel):
+    """Full conversation with messages."""
+    id: str
+    title: Optional[str] = None
+    created_at: str
+    updated_at: str
+    messages: List[MessageRecord] = []
