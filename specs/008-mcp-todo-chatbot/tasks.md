@@ -167,18 +167,18 @@
 
 **Purpose**: End-to-end testing of complete flow per spec acceptance scenarios.
 
-- [ ] T051 Test full flow: type "Add a task to buy groceries" → verify task created in DB and agent confirms
-- [ ] T052 Test full flow: type "Show my tasks" → verify agent lists tasks via list_tasks tool
-- [ ] T053 Test full flow: type "Mark buy groceries as done" → verify complete_task invoked, task completed
-- [ ] T054 Test full flow: type "Change priority to high" → verify update_task invoked, priority updated
-- [ ] T055 Test full flow: type "Delete buy groceries" → verify agent asks for confirmation before delete_task
-- [ ] T056 Test conversation persistence: send multiple messages in same conversation, verify context preserved
-- [ ] T057 Test multi-step chaining: type "Complete buy groceries and add pick up dry cleaning" → verify both tools invoked
-- [ ] T058 Test error handling: send empty message → verify 400 response
-- [ ] T059 Test error handling: reference non-existent task → verify agent offers to list tasks
-- [ ] T060 Test non-task query: send "What's the weather?" → verify agent redirects to task management
-- [ ] T061 Verify tool_calls array in API response contains all tool invocations from the request
-- [ ] T062 Run quickstart.md validation checklist
+- [x] T051 Test full flow: type "Add a task to buy groceries" → verify task created in DB and agent confirms
+- [x] T052 Test full flow: type "Show my tasks" → verify agent lists tasks via list_tasks tool
+- [x] T053 Test full flow: type "Mark buy groceries as done" → verify complete_task invoked, task completed
+- [x] T054 Test full flow: type "Change priority to high" → verify update_task invoked, priority updated
+- [x] T055 Test full flow: type "Delete buy groceries" → verify agent asks for confirmation before delete_task
+- [x] T056 Test conversation persistence: send multiple messages in same conversation, verify context preserved
+- [x] T057 Test multi-step chaining: type "Complete buy groceries and add pick up dry cleaning" → verify both tools invoked
+- [x] T058 Test error handling: send empty message → verify 400 response
+- [x] T059 Test error handling: reference non-existent task → verify agent offers to list tasks
+- [x] T060 Test non-task query: send "What's the weather?" → verify agent redirects to task management
+- [x] T061 Verify tool_calls array in API response contains all tool invocations from the request
+- [x] T062 Run quickstart.md validation checklist
 
 **Checkpoint**: All acceptance scenarios pass. System ready for hackathon review.
 
