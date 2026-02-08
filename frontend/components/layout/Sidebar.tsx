@@ -12,6 +12,7 @@ import {
   Bot,
   Calendar,
   BarChart3,
+  MessageSquare,
   Settings,
   LogOut,
   Moon,
@@ -36,6 +37,7 @@ export default function Sidebar() {
   const navItems = [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/tasks', icon: CheckSquare, label: 'My Tasks' },
+    { href: '/chat', icon: MessageSquare, label: 'Chat' },
     { href: '/agent', icon: Bot, label: 'AI Agent' },
     { href: '/calendar', icon: Calendar, label: 'Calendar' },
     { href: '/analytics', icon: BarChart3, label: 'Analytics' },
