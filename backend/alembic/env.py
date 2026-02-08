@@ -7,6 +7,7 @@ from sqlmodel import SQLModel
 # Import all models to ensure they're registered with SQLModel metadata
 from src.models.task import Task
 from src.models.user import User
+from src.models.conversation import Conversation, Message
 from src.core.config import settings
 
 # this is the Alembic Config object

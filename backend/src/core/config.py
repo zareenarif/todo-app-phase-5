@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     LLM_TEMPERATURE: float = 0.7
     LLM_MAX_TOKENS: int = 1024
 
+    # Phase 3: OpenAI Configuration (for Agents SDK)
+    OPENAI_API_KEY: str = ""
+
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS_ORIGINS string into list."""

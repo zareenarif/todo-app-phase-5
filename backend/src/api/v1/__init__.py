@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from src.api.v1.tasks import router as tasks_router
 from src.api.v1.auth import router as auth_router
 from src.api.v1.agents import router as agents_router
+from src.api.v1.chat import router as chat_router
 
 # Create main API v1 router
 api_router = APIRouter()
@@ -13,3 +14,4 @@ api_router = APIRouter()
 api_router.include_router(auth_router)
 api_router.include_router(tasks_router)
 api_router.include_router(agents_router)
+api_router.include_router(chat_router)

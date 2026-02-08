@@ -1,373 +1,432 @@
-# Todo Full-Stack Web Application Constitution (Phase 2)
+# Todo AI Chatbot Application Constitution (Phase 3)
 
 <!--
 Sync Impact Report:
-- Version change: 1.2.0 → 2.0.0
-- Major version increment: Fundamental architectural transformation from CLI to full-stack web application
+- Version change: 2.0.0 → 3.0.0
+- Major version increment: Fundamental architectural transformation from
+  full-stack web app to AI-powered conversational chatbot with MCP architecture
 - Breaking changes:
-  - Removed: CLI-only interface constraint
-  - Removed: In-memory only storage constraint
-  - Removed: Python-only constraint
-  - Added: Full-stack architecture (Next.js frontend + FastAPI backend)
-  - Added: PostgreSQL database persistence
-  - Added: Authentication and authorization requirements
-  - Added: Multi-user support with data isolation
+  - Removed: Next.js frontend (replaced with OpenAI ChatKit)
+  - Removed: Frontend component/page requirements (TaskList, TaskForm, etc.)
+  - Removed: Responsive design requirements (ChatKit handles UI)
+  - Removed: "AI/Chatbot features" from out-of-scope (now primary scope)
+  - Added: OpenAI Agents SDK for AI logic
+  - Added: Official MCP SDK for tool server
+  - Added: MCP statelessness principles
+  - Added: Conversation state persistence requirements
+  - Added: Natural language → tool mapping requirements
 - Modified principles:
-  - Principle IV: Simplicity Over Complexity (updated for full-stack context)
-  - Principle V: Scope Discipline (reframed for web application features)
+  - Principle IV: Simplicity Over Complexity (updated for MCP/agent context)
+  - Principle V: Scope Discipline (reframed for chatbot features)
+  - Principle VII: Stateless Authentication → Stateless Server & MCP Tools
+  - Replaced Principle VIII: User Data Isolation → MCP Tool Discipline
 - Added principles:
-  - Principle VI: Security by Design
-  - Principle VII: Stateless Authentication
-  - Principle VIII: User Data Isolation
-- New sections: Technology Stack, Security Architecture, API Design Principles
+  - Principle IX: Conversation State Persistence
+  - Principle X: AI Agent Boundary Discipline
+- Removed sections:
+  - Frontend Requirements (pages, components, responsive design)
+- Added sections:
+  - MCP Architecture, AI Agent Architecture, Conversation Management
 - Templates requiring updates:
-  ✅ .specify/templates/plan-template.md (reviewed - updated for full-stack planning)
-  ✅ .specify/templates/spec-template.md (reviewed - updated for API/UI requirements)
-  ✅ .specify/templates/tasks-template.md (reviewed - updated for frontend/backend task separation)
+  ⚠ .specify/templates/plan-template.md (pending - constitution check
+    gates need MCP/agent alignment)
+  ⚠ .specify/templates/spec-template.md (pending - needs MCP tool
+    contract sections)
+  ⚠ .specify/templates/tasks-template.md (pending - needs MCP/agent
+    task types)
 - Follow-up TODOs: None
-- Impact: Complete architectural transformation enabling web-based multi-user todo application with secure authentication and data persistence
+- Impact: Complete transformation to AI-powered conversational todo
+  chatbot with MCP-compliant stateless tool architecture
 -->
 
 ## Purpose
 
-This project follows Spec-Driven Development (SDD). The objective of Phase 2 is to transform the Phase 1 CLI application into a production-ready, full-stack web application with secure authentication, persistent storage, and multi-user support.
+This project follows Spec-Driven Development (SDD). The objective of
+Phase 3 is to build an AI-powered conversational Todo chatbot using
+Model Context Protocol (MCP) architecture, where users interact with
+their tasks through natural language via an AI agent.
 
-All development decisions MUST be guided by this constitution and the approved specification. No implementation may begin until the specification, plan, and tasks are agreed upon.
+All development decisions MUST be guided by this constitution and the
+approved specification. No implementation may begin until the
+specification, plan, and tasks are agreed upon.
 
-**Phase Transition:** Phase 2 builds upon the Phase 1 foundation by migrating all functionality to a web-based architecture while adding authentication, persistence, and multi-user capabilities.
+**Phase Transition:** Phase 3 builds upon the Phase 2 foundation by
+replacing the traditional web UI with a conversational AI interface
+powered by OpenAI Agents SDK, exposing all task operations through
+stateless MCP tools.
+
+**Hackathon Context:** This is a hackathon evaluation environment.
+Architectural correctness, stateless compliance, tool usage accuracy,
+and MCP compliance are the primary evaluation criteria. UI polish is
+secondary to architectural soundness.
 
 ## Core Principles
 
 ### I. Specification Before Implementation
 
-All features MUST be specified before any code is written. The specification defines what will be built, why it is needed, and what success looks like.
+All features MUST be specified before any code is written. The
+specification defines what will be built, why it is needed, and what
+success looks like.
 
 **Non-negotiable rules:**
 - No coding without an approved specification
-- Specifications must be concrete and testable
-- Requirements must be clear and unambiguous
-- API contracts must be explicitly defined
-- UI/UX requirements must include acceptance criteria
+- Specifications MUST be concrete and testable
+- Requirements MUST be clear and unambiguous
+- MCP tool contracts MUST be explicitly defined
+- AI agent behavior MUST include acceptance criteria
 
-**Rationale:** Specifications prevent scope creep, ensure alignment, and provide a shared understanding of what will be delivered. For full-stack applications, specifications serve as contracts between frontend, backend, and database layers.
+**Rationale:** Specifications prevent scope creep, ensure alignment,
+and provide a shared understanding. For MCP-based systems,
+specifications serve as contracts between the AI agent, MCP tools,
+and the database layer.
 
 ### II. Planning Before Coding
 
-All implementations MUST have an architectural plan approved before code is generated. The plan defines how the specification will be achieved technically across the entire stack.
+All implementations MUST have an architectural plan approved before
+code is generated. The plan defines how the specification will be
+achieved technically across the MCP stack.
 
 **Non-negotiable rules:**
 - No coding without an approved implementation plan
-- Plans must identify all components (frontend, backend, database) and their interactions
-- Plans must define API endpoints, request/response schemas, and database models
-- Plans must address authentication flow and security requirements
-- Plans must consider separation of concerns across layers
+- Plans MUST identify all components (ChatKit frontend, FastAPI
+  backend, MCP server, AI agent) and their interactions
+- Plans MUST define MCP tool schemas, request/response contracts,
+  and database models
+- Plans MUST address authentication flow and statelessness
+- Plans MUST specify conversation state management strategy
 
-**Rationale:** Planning ensures that technical decisions are deliberate and documented across the full stack. It prevents reactive coding, ensures architectural consistency, and validates that frontend, backend, and database designs align.
+**Rationale:** Planning ensures technical decisions are deliberate
+and documented. It prevents reactive coding and validates that MCP
+tools, AI agent logic, and database designs align.
 
 ### III. Tasks Before Execution
 
-All work MUST be broken down into discrete, testable tasks before execution begins. Tasks define the specific steps to implement the plan.
+All work MUST be broken down into discrete, testable tasks before
+execution begins.
 
 **Non-negotiable rules:**
 - No execution without a defined task list
-- Each task must be independently verifiable
-- Tasks must reference specific files, endpoints, and components
-- Tasks must specify whether they are frontend, backend, database, or integration work
-- Tasks must identify dependencies (e.g., backend endpoint must exist before frontend integration)
+- Each task MUST be independently verifiable
+- Tasks MUST reference specific files, endpoints, and MCP tools
+- Tasks MUST specify layer: MCP server, AI agent, backend API,
+  frontend, or database
+- Tasks MUST identify dependencies
 
-**Rationale:** Task decomposition ensures work is trackable, testable, and completable in small increments across multiple technologies. It makes progress visible and prevents partial implementations.
+**Rationale:** Task decomposition ensures work is trackable, testable,
+and completable in small increments across MCP architecture layers.
 
 ### IV. Simplicity Over Complexity
 
-The implementation MUST be as simple as possible while meeting all requirements. Complexity requires explicit justification.
+The implementation MUST be as simple as possible while meeting all
+requirements. Complexity requires explicit justification.
 
 **Non-negotiable rules:**
-- Use established frameworks and patterns (Next.js App Router, FastAPI conventions)
-- No custom authentication schemes (use Better Auth)
+- Use established frameworks and patterns (FastAPI, MCP SDK, OpenAI
+  Agents SDK)
+- No custom protocol implementations (use Official MCP SDK)
 - No unnecessary abstraction layers
 - Clear, readable code over clever solutions
-- Leverage framework defaults unless requirements demand customization
+- Leverage SDK defaults unless requirements demand customization
+- MCP tools MUST be thin wrappers around task operations
 
-**Rationale:** Simplicity reduces maintenance burden, improves reliability, and makes the codebase accessible. In full-stack applications, simplicity means using framework conventions and standard patterns rather than inventing custom solutions.
+**Rationale:** Simplicity reduces bugs and improves evaluation scores.
+In hackathon context, simplicity means using SDK conventions and
+standard MCP patterns rather than inventing custom solutions.
 
-### V. Scope Discipline and Controlled Enhancement
+### V. Scope Discipline
 
-This project maintains strict scope discipline. New features may be added ONLY through proper Spec-Driven Development workflow with explicit user approval.
+This project maintains strict scope discipline. Only features
+explicitly defined in the Phase 3 specification may be implemented.
 
 **Non-negotiable rules:**
-- All new features MUST follow SDD workflow: specification → plan → tasks → implementation
+- ALL features MUST follow SDD workflow: specification → plan →
+  tasks → implementation
 - No features may be added without user-approved specification
+- Follow hackathon requirements EXACTLY — no feature creep
+- No UI or backend work unless explicitly defined in the spec
 - Explicitly out of scope:
-  - AI/Chatbot features
   - Kubernetes orchestration
   - Cloud-specific infrastructure code
   - Background worker processes
   - Admin panels or user management dashboards
-- Features must maintain simplicity and architectural consistency
-- All Phase 1 features must be preserved and enhanced for web interface
+  - Custom UI components beyond ChatKit integration
+  - Direct database access by the AI agent
+  - Business logic inside the frontend
 
-**Rationale:** Scope discipline ensures the project remains focused and deliverable. The explicit out-of-scope list prevents feature creep while allowing core todo functionality to be fully realized in a web context.
+**Rationale:** Scope discipline is critical for hackathon success.
+Every unspecified feature is wasted effort and potential point
+deduction for architectural violations.
 
 ### VI. Security by Design
 
-Security MUST be built into every layer of the application from the start. Security is not optional and cannot be retrofitted.
+Security MUST be built into every layer of the application.
 
 **Non-negotiable rules:**
-- All API endpoints MUST require valid JWT authentication (no public endpoints except auth)
+- All API endpoints MUST require valid authentication (except auth
+  endpoints)
 - All user input MUST be validated and sanitized
-- All database queries MUST use parameterized statements (SQLModel ORM enforced)
+- All database queries MUST use parameterized statements (SQLModel
+  ORM enforced)
 - Secrets MUST be stored in environment variables, never in code
-- HTTPS MUST be enforced in production
 - CORS policies MUST be explicitly configured
-- SQL injection, XSS, and CSRF vulnerabilities MUST be prevented by design
+- SQL injection, XSS, and CSRF MUST be prevented by design
 
-**Rationale:** Security vulnerabilities are expensive to fix later and can compromise user data. Building security into the architecture from day one ensures protection is consistent and comprehensive.
+**Rationale:** Security vulnerabilities compromise user data and
+reduce hackathon evaluation scores.
 
-### VII. Stateless Authentication
+### VII. Stateless Server & MCP Tools
 
-Authentication MUST be stateless using JWT tokens. No server-side session storage is permitted.
-
-**Non-negotiable rules:**
-- Better Auth MUST be used for authentication (integrated with Next.js frontend)
-- JWTs MUST be used for all authenticated requests
-- Backend MUST verify JWT independently using shared `BETTER_AUTH_SECRET`
-- JWT verification MUST happen on every protected API request
-- Token expiration MUST be enforced
-- Requests without valid JWT MUST return 401 Unauthorized
-- No session storage, cookies for session tracking, or server-side session state
-
-**Rationale:** Stateless authentication scales horizontally, simplifies deployment, and eliminates session synchronization issues. JWT enables the backend to verify requests independently without database lookups or shared session stores.
-
-### VIII. User Data Isolation
-
-Each user MUST only access their own data. Cross-user data leakage is a critical security failure.
+The backend server and all MCP tools MUST be stateless. No
+server-side session storage or in-memory state is permitted.
 
 **Non-negotiable rules:**
-- Every task record MUST have a `user_id` foreign key
-- All database queries MUST filter by authenticated user's ID
-- Backend MUST extract `user_id` from verified JWT
-- Frontend MUST send JWT with every API request
-- API responses MUST only include data belonging to the authenticated user
-- No endpoint may return or modify another user's tasks under any circumstance
+- The FastAPI server MUST be stateless
+- MCP tools MUST be stateless — no in-memory caching of user data
+- MCP tools MUST ONLY expose task operations (CRUD)
+- Each MCP tool invocation MUST be self-contained
+- All state MUST be persisted in the database
+- Authentication MUST use Better Auth with stateless token
+  verification
+- Requests without valid authentication MUST be rejected
 
-**Rationale:** Data isolation is fundamental to multi-user applications. Leaking user data destroys trust and violates privacy. Enforcing user_id filtering at the database query level ensures isolation is guaranteed by architecture, not just by careful coding.
+**Rationale:** Statelessness is a critical evaluation criterion.
+MCP tools that maintain state violate the protocol's design
+principles and will fail compliance checks.
+
+### VIII. MCP Tool Discipline
+
+MCP tools MUST be the exclusive interface between the AI agent and
+task data. No shortcuts or bypasses are permitted.
+
+**Non-negotiable rules:**
+- AI agent MUST use MCP tools for ALL task actions
+- No direct database access by the AI agent
+- MCP tools MUST ONLY expose task operations (create, read, update,
+  delete, list, complete)
+- Each MCP tool MUST have a clear, single responsibility
+- Tool input/output schemas MUST be explicitly defined
+- Natural language → tool mapping MUST be exact and deterministic
+- Tool responses MUST be structured for AI agent consumption
+
+**Rationale:** MCP compliance is mandatory for hackathon evaluation.
+The agent-tool boundary enforces separation of concerns and ensures
+the system is auditable and testable.
+
+### IX. Conversation State Persistence
+
+Conversation state MUST be persisted in the database. No in-memory
+conversation tracking is permitted.
+
+**Non-negotiable rules:**
+- All conversation history MUST be stored in the database
+- Conversation context MUST survive server restarts
+- Each conversation MUST be associated with an authenticated user
+- The AI agent MUST be able to resume conversations from persisted
+  state
+- No in-memory conversation buffers or caches
+
+**Rationale:** Conversation persistence is required for stateless
+server compliance. Users expect conversation continuity, and the
+evaluation criteria require database-backed state management.
+
+### X. AI Agent Boundary Discipline
+
+The AI agent MUST operate within strict boundaries. It receives
+natural language input, maps it to MCP tool calls, and returns
+natural language responses.
+
+**Non-negotiable rules:**
+- The AI agent MUST use OpenAI Agents SDK
+- The agent MUST NOT contain business logic — only tool orchestration
+- The agent MUST map natural language to appropriate MCP tool calls
+- The agent MUST NOT access the database directly
+- The agent MUST NOT modify data except through MCP tools
+- The agent MUST handle ambiguous input by asking clarifying
+  questions
+- The agent MUST provide helpful, conversational responses
+
+**Rationale:** Clean agent boundaries ensure architectural
+correctness and testability. The agent is a translator between
+natural language and MCP tools, not a business logic container.
 
 ## Technology Stack
 
-The following technologies are REQUIRED and MUST be used exactly as specified:
+The following technologies are REQUIRED and MUST be used exactly
+as specified:
 
 ### Frontend
-- **Framework:** Next.js 16+ (App Router only, not Pages Router)
-- **Language:** TypeScript (strongly typed, no `any` types without justification)
-- **Styling:** Tailwind CSS (utility-first, responsive design)
-- **Authentication:** Better Auth (integrated with Next.js)
-- **State Management:** React hooks and server components (no Redux unless justified)
-- **HTTP Client:** Fetch API or Axios for backend API calls
+- **UI Framework:** OpenAI ChatKit (conversational interface)
+- **Purpose:** Chat-based interaction with the AI todo agent
+- **Constraint:** No business logic inside the frontend
 
 ### Backend
 - **Framework:** Python FastAPI (async where beneficial)
 - **Language:** Python 3.11+
 - **ORM:** SQLModel (Pydantic-based, type-safe)
-- **Authentication:** JWT verification using `BETTER_AUTH_SECRET`
 - **Validation:** Pydantic models for request/response validation
+
+### AI Logic
+- **Framework:** OpenAI Agents SDK
+- **Purpose:** Natural language understanding and MCP tool
+  orchestration
+- **Constraint:** Agent MUST use MCP tools for all task actions
+
+### MCP Server
+- **Framework:** Official MCP SDK
+- **Purpose:** Expose task operations as stateless MCP tools
+- **Constraint:** Tools MUST be stateless, MUST only expose task
+  operations
 
 ### Database
 - **Database:** Neon Serverless PostgreSQL
-- **Migrations:** Alembic (SQLModel-compatible)
-- **Connection:** PostgreSQL connection string from environment variable
+- **ORM:** SQLModel
+- **Connection:** PostgreSQL connection string from environment
+  variable
 
-### Authentication & Tokens
-- **Auth Provider:** Better Auth (Next.js integration)
-- **Token Format:** JWT (JSON Web Tokens)
-- **Shared Secret:** `BETTER_AUTH_SECRET` environment variable (same for frontend and backend)
-- **Token Storage:** HTTP-only cookies (frontend) + Authorization header (backend requests)
+### Authentication
+- **Auth Provider:** Better Auth
+- **Constraint:** Stateless token-based authentication
 
 ### Development & Tooling
 - **Spec-Driven Development:** Claude Code + Spec-Kit Plus
-- **Code Generation:** Claude Code (all code MUST be generated, no manual coding)
+- **Code Generation:** Claude Code (ALL code MUST be generated,
+  NO manual coding by humans)
 - **Version Control:** Git with semantic commit messages
 - **Environment Variables:** `.env` files (never committed)
 
-**Rationale:** This stack provides type safety (TypeScript + Pydantic), modern frameworks (Next.js + FastAPI), serverless scaling (Neon PostgreSQL), and stateless authentication (JWT). All technologies are production-proven and well-documented.
+**Rationale:** This stack satisfies all hackathon requirements:
+OpenAI ChatKit for conversational UI, Agents SDK for AI logic,
+MCP SDK for tool protocol compliance, FastAPI for backend,
+SQLModel + Neon PostgreSQL for persistence, Better Auth for
+authentication.
 
 ## Technical Constraints
 
 ### Architecture
-- **Separation of Concerns:** Frontend, backend, and database MUST be clearly separated
-- **RESTful API:** Backend MUST expose RESTful JSON endpoints
-- **Stateless Backend:** Backend MUST NOT maintain session state
-- **Type Safety:** TypeScript frontend and Pydantic backend MUST validate all data
+- **MCP Compliance:** All task operations MUST go through MCP tools
+- **Stateless Backend:** Server MUST NOT maintain session state
+- **Stateless MCP Tools:** Tools MUST NOT cache or store state
+- **Agent Boundary:** AI agent MUST NOT access database directly
+- **Frontend Boundary:** No business logic in ChatKit frontend
+- **Conversation Persistence:** All state in the database
 
-### Deployment Constraints
-- **Containerization:** Not required (out of scope for Phase 2)
-- **Orchestration:** No Kubernetes or cloud orchestration
-- **Background Workers:** Not permitted (out of scope)
-- **Admin Dashboards:** Not permitted (out of scope)
+### MCP Tool Requirements
+- Tools MUST be stateless
+- Tools MUST only expose task operations
+- Tool schemas MUST be explicitly defined
+- Tool responses MUST be structured JSON
+- Each tool MUST have a single, clear responsibility
 
 ### Database Constraints
-- **ORM Required:** All database access MUST use SQLModel (no raw SQL except migrations)
-- **Migrations Required:** All schema changes MUST be versioned with Alembic
-- **User Isolation:** Every user-data table MUST have `user_id` foreign key
-- **Timestamps:** All tables MUST have `created_at` and `updated_at` fields
+- **ORM Required:** All database access MUST use SQLModel
+- **User Isolation:** Every user-data table MUST have `user_id`
+- **Timestamps:** All tables MUST have `created_at` and `updated_at`
+- **Conversation Storage:** Conversation history MUST be persisted
 
-## Security Architecture
+### Deployment Constraints
+- **Containerization:** Not required
+- **Orchestration:** No Kubernetes or cloud orchestration
+- **Background Workers:** Not permitted
+- **Admin Dashboards:** Not permitted
 
-### Authentication Flow
-1. User registers/logs in via Better Auth (Next.js frontend)
-2. Better Auth generates JWT signed with `BETTER_AUTH_SECRET`
-3. Frontend stores JWT in HTTP-only cookie
-4. Frontend includes JWT in `Authorization: Bearer <token>` header for all API requests
-5. Backend verifies JWT signature using `BETTER_AUTH_SECRET`
-6. Backend extracts `user_id` from verified JWT
-7. Backend filters all queries by `user_id`
+## MCP Architecture
 
-### Environment Variables (REQUIRED)
-- `DATABASE_URL` - Neon PostgreSQL connection string
-- `BETTER_AUTH_SECRET` - Shared secret for JWT signing/verification (MUST match between frontend/backend)
-- `NEXT_PUBLIC_API_URL` - Backend API base URL (for frontend API calls)
-- `CORS_ORIGINS` - Allowed frontend origins (for backend CORS configuration)
+### Tool Design Principles
+1. Each tool has ONE responsibility (e.g., create_task, list_tasks)
+2. Tools receive all needed context via parameters (stateless)
+3. Tools return structured responses for agent consumption
+4. Tools validate input and return clear error messages
+5. Tools enforce user isolation (filter by authenticated user_id)
 
-### Security Checklist (MUST verify before deployment)
-- [ ] All API endpoints require JWT (except auth endpoints)
-- [ ] JWT verification uses correct secret
-- [ ] All queries filter by authenticated user_id
-- [ ] No passwords stored in plain text
-- [ ] No secrets in code or version control
-- [ ] CORS configured to allow only specific origins
-- [ ] HTTPS enforced in production
-- [ ] Input validation on all endpoints
+### Required MCP Tools
+- `create_task` — Create a new task
+- `list_tasks` — List tasks with optional filters
+- `get_task` — Get a single task by ID
+- `update_task` — Update task fields
+- `delete_task` — Delete a task
+- `complete_task` — Toggle task completion status
 
-## API Design Principles
+### Tool Flow
+1. User sends natural language message via ChatKit
+2. AI agent (OpenAI Agents SDK) interprets the message
+3. Agent maps intent to one or more MCP tool calls
+4. MCP tools execute against the database via SQLModel
+5. Tool responses returned to agent
+6. Agent formulates natural language response
+7. Response displayed in ChatKit
 
-All RESTful API endpoints MUST follow these conventions:
+## AI Agent Architecture
 
-### Endpoint Structure
-- Base URL: `/api/v1/` (version prefix required)
-- Resource naming: plural nouns (e.g., `/api/v1/tasks`, not `/api/v1/task`)
-- HTTP methods:
-  - `GET` - Retrieve resources (list or single)
-  - `POST` - Create new resource
-  - `PUT/PATCH` - Update existing resource
-  - `DELETE` - Delete resource
+### Agent Responsibilities
+- Parse natural language intent from user messages
+- Map intent to appropriate MCP tool calls
+- Handle multi-step operations (e.g., "mark all overdue tasks done")
+- Ask clarifying questions when intent is ambiguous
+- Provide helpful, conversational responses
+- Maintain conversation context via persisted state
 
-### Request/Response Format
-- Content-Type: `application/json`
-- Request body: JSON (validated by Pydantic models)
-- Response body: JSON (serialized from Pydantic models)
-- Error responses: `{ "detail": "Error message" }` with appropriate HTTP status code
-
-### Status Codes (REQUIRED)
-- `200 OK` - Successful GET/PUT/PATCH
-- `201 Created` - Successful POST
-- `204 No Content` - Successful DELETE
-- `400 Bad Request` - Invalid input
-- `401 Unauthorized` - Missing or invalid JWT
-- `403 Forbidden` - Valid JWT but insufficient permissions
-- `404 Not Found` - Resource does not exist
-- `500 Internal Server Error` - Unexpected server error
-
-### Authentication Header (REQUIRED for all protected endpoints)
-```
-Authorization: Bearer <jwt_token>
-```
+### Agent Constraints
+- MUST use OpenAI Agents SDK
+- MUST NOT contain business logic
+- MUST NOT access database directly
+- MUST use MCP tools for ALL data operations
+- MUST handle errors gracefully with user-friendly messages
 
 ## Data Model Rules
 
 ### Task Entity (REQUIRED fields)
 
-All tasks MUST contain the following attributes:
-
 **Core Fields:**
-- `id` - UUID primary key (auto-generated)
-- `user_id` - UUID foreign key to users table (REQUIRED, indexed)
-- `title` - String, required, non-empty (max 200 chars)
-- `description` - String, optional (max 2000 chars)
-- `completed` - Boolean, default False
-- `created_at` - Timestamp, auto-generated
-- `updated_at` - Timestamp, auto-updated
+- `id` — UUID primary key (auto-generated)
+- `user_id` — UUID foreign key to users table (REQUIRED, indexed)
+- `title` — String, required, non-empty (max 200 chars)
+- `description` — String, optional (max 2000 chars)
+- `completed` — Boolean, default False
+- `created_at` — Timestamp, auto-generated
+- `updated_at` — Timestamp, auto-updated
 
-**Extended Fields (from Phase 1 Feature 003):**
-- `priority` - Enum: 'high' | 'medium' | 'low' | null
-- `tags` - Array of strings (JSON field or separate tags table)
-- `due_date` - Date, optional
-- `recurrence` - Enum: 'daily' | 'weekly' | 'monthly' | null
+**Extended Fields:**
+- `priority` — Enum: 'high' | 'medium' | 'low' | null
+- `tags` — Array of strings
+- `due_date` — Date, optional
+- `recurrence` — Enum: 'daily' | 'weekly' | 'monthly' | null
 
-**Database Constraints:**
-- `user_id` MUST be indexed for query performance
-- `title` MUST have NOT NULL constraint
-- `completed` MUST default to false
-- `created_at` MUST default to NOW()
-- `updated_at` MUST update automatically on record change
+### Conversation Entity (REQUIRED fields)
+- `id` — UUID primary key
+- `user_id` — UUID foreign key (REQUIRED, indexed)
+- `messages` — JSON array of message objects
+- `created_at` — Timestamp
+- `updated_at` — Timestamp
 
 ### User Entity (REQUIRED fields)
-
 Managed by Better Auth, but backend MUST reference:
-- `id` - UUID primary key
-- `email` - String, unique, indexed
-- `name` - String, optional
-- `created_at` - Timestamp
+- `id` — UUID primary key
+- `email` — String, unique, indexed
+- `name` — String, optional
+- `created_at` — Timestamp
 
-## Frontend Requirements
+## Environment Variables (REQUIRED)
+- `DATABASE_URL` — Neon PostgreSQL connection string
+- `BETTER_AUTH_SECRET` — Shared secret for authentication
+- `OPENAI_API_KEY` — OpenAI API key for Agents SDK
+- `CORS_ORIGINS` — Allowed frontend origins
 
-### Pages (REQUIRED)
-- `/` - Landing page (public)
-- `/login` - Login page (public)
-- `/register` - Registration page (public)
-- `/dashboard` - Main todo dashboard (protected)
-- `/tasks` - Task list view (protected)
-- `/tasks/[id]` - Task detail view (protected)
+## Evaluation Criteria Awareness
 
-### Components (REQUIRED)
-- TaskList - Display list of tasks with filters/sort
-- TaskForm - Create/edit task form
-- TaskCard - Individual task display
-- AuthGuard - Protect routes requiring authentication
-- Navbar - Navigation with user menu
+The following evaluation priorities MUST guide all decisions:
 
-### Responsive Design (REQUIRED)
-- Mobile-first design (320px minimum width)
-- Tablet breakpoint (768px)
-- Desktop breakpoint (1024px)
-- All interactive elements MUST be touch-friendly (44px minimum)
-
-## Backend Requirements
-
-### API Endpoints (REQUIRED)
-
-**Authentication (delegated to Better Auth, backend verifies JWT):**
-- No backend auth endpoints (Better Auth handles this)
-
-**Tasks:**
-- `GET /api/v1/tasks` - List all tasks for authenticated user (with filters/sort)
-- `POST /api/v1/tasks` - Create new task
-- `GET /api/v1/tasks/{id}` - Get single task
-- `PUT /api/v1/tasks/{id}` - Update task
-- `DELETE /api/v1/tasks/{id}` - Delete task
-- `PATCH /api/v1/tasks/{id}/complete` - Toggle completion status
-
-**Query Parameters (supported on GET /api/v1/tasks):**
-- `?status=pending|completed` - Filter by completion status
-- `?priority=high|medium|low` - Filter by priority
-- `?tags=work,personal` - Filter by tags (comma-separated)
-- `?sort=created_at|due_date|priority` - Sort field
-- `?order=asc|desc` - Sort direction
-
-### Middleware (REQUIRED)
-- JWT verification middleware (runs on all protected routes)
-- CORS middleware (configured with allowed origins)
-- Request validation middleware (Pydantic)
-- Error handling middleware (consistent error responses)
+1. **Architectural correctness > UI polish** — Get the MCP
+   architecture right before worrying about ChatKit appearance
+2. **Stateless correctness is critical** — Server and MCP tools
+   MUST be verifiably stateless
+3. **Tool usage accuracy is critical** — MCP tools MUST work
+   correctly and be properly invoked
+4. **Natural language → tool mapping MUST be exact** — Agent MUST
+   reliably map user intent to correct tool calls
+5. **MCP compliance is mandatory** — Protocol adherence is
+   non-negotiable
 
 ## Quality Standards
-
-All code MUST meet the following quality standards:
-
-**Frontend:**
-- TypeScript strict mode enabled
-- No `any` types without explicit justification
-- All components properly typed (Props interfaces)
-- Accessibility (WCAG 2.1 Level AA minimum)
-- Responsive design tested on mobile/tablet/desktop
 
 **Backend:**
 - Type hints on all functions
@@ -376,119 +435,123 @@ All code MUST meet the following quality standards:
 - Proper error handling with appropriate status codes
 - All endpoints include API documentation (OpenAPI/Swagger)
 
-**Database:**
-- All migrations reversible (up and down)
-- All foreign keys properly indexed
-- All user-data tables include user_id
-- All tables include timestamps
+**MCP Tools:**
+- Each tool MUST have clear input/output schemas
+- Each tool MUST validate inputs
+- Each tool MUST handle errors gracefully
+- Each tool MUST enforce user isolation
+
+**AI Agent:**
+- Agent MUST handle edge cases (empty input, ambiguous requests)
+- Agent MUST provide helpful error messages
+- Agent MUST not hallucinate tool capabilities
 
 **General:**
 - Clean and readable code (self-documenting)
 - Small, focused functions with single responsibilities
 - No dead code or unused imports
-- Comprehensive docstrings/JSDoc comments
 - No hardcoded secrets or environment-specific values
 
 ## Testing Requirements
 
 **Manual Testing (REQUIRED before deployment):**
-- All user flows tested end-to-end
-- Authentication flow verified (register, login, logout)
-- All CRUD operations tested for tasks
-- Filter and sort functionality verified
-- Multi-user isolation tested (two users cannot see each other's tasks)
+- All MCP tools tested independently
+- AI agent tested with natural language inputs
+- Conversation persistence verified
+- Multi-user isolation tested
+- Statelessness verified (server restart preserves state)
 - Error cases tested (invalid input, unauthorized access)
-
-**Automated Testing (OPTIONAL for Phase 2):**
-- Unit tests for business logic
-- Integration tests for API endpoints
-- End-to-end tests for critical user flows
+- Natural language → tool mapping accuracy tested
 
 ## Governance
 
-This constitution supersedes all other development practices. Any amendments to this constitution MUST be documented with rationale and approved before taking effect.
+This constitution supersedes all other development practices. Any
+amendments MUST be documented with rationale and approved before
+taking effect.
 
 **Compliance:**
-- All specifications, plans, and tasks MUST be verified against this constitution
+- All specifications, plans, and tasks MUST be verified against
+  this constitution
 - Any complexity introduced MUST be justified explicitly
-- All code generation MUST be performed by Claude Code (no manual coding by humans)
-- Security requirements MUST be verified at every stage (spec, plan, implementation)
+- ALL code generation MUST be performed by Claude Code (no manual
+  coding by humans)
+- MCP compliance MUST be verified at every stage
 
 **Amendment Process:**
-- Amendments require explicit documentation of the change and rationale
-- Version must be incremented according to semantic versioning:
-  - MAJOR: Breaking changes to architecture, technology stack, or core principles
+- Amendments require explicit documentation of change and rationale
+- Version MUST be incremented per semantic versioning:
+  - MAJOR: Breaking changes to architecture, stack, or principles
   - MINOR: New principles, requirements, or substantial additions
   - PATCH: Clarifications, typo fixes, non-breaking refinements
-- All dependent templates and documentation must be updated to reflect amendments
-- All active features must be reviewed for constitutional compliance after amendments
+- All dependent templates and docs MUST be updated
+- All active features MUST be reviewed for compliance after amendments
 
-**Version:** 2.0.0 | **Ratified:** 2026-01-05 | **Last Amended:** 2026-01-05
+**Version:** 3.0.0 | **Ratified:** 2026-01-05 | **Last Amended:** 2026-02-08
 
 ## Amendment History
 
-### Version 2.0.0 (2026-01-05)
+### Version 3.0.0 (2026-02-08)
 
-**Amendment:** Complete architectural transformation to full-stack web application
+**Amendment:** Complete architectural transformation to AI-powered
+conversational chatbot with MCP architecture
 
-**Rationale:** Phase 2 evolves the CLI application into a production-ready web application with secure authentication, persistent storage, and multi-user support. This enables real-world usage while preserving all Phase 1 functionality in a web-based interface.
+**Rationale:** Phase 3 evolves the full-stack web application into
+an AI-powered conversational todo chatbot. Users interact via natural
+language through OpenAI ChatKit, with an AI agent (OpenAI Agents SDK)
+orchestrating task operations through stateless MCP tools.
 
 **Major Changes:**
-- **Technology Stack:** Added Next.js 16+ (frontend), FastAPI (backend), Neon PostgreSQL (database), Better Auth (authentication)
-- **Architecture:** Transformed from single-layer CLI to three-layer full-stack (frontend/backend/database)
-- **Storage:** Replaced in-memory storage with persistent PostgreSQL database
-- **Authentication:** Added stateless JWT-based authentication with Better Auth
-- **Multi-User:** Added user isolation and data separation requirements
-- **Security:** Added three new security-focused principles (VI, VII, VIII)
-- **Constraints:** Removed CLI-only and in-memory constraints; added full-stack constraints
-- **API Design:** Added comprehensive RESTful API design principles
-- **Data Model:** Extended Task entity with user_id and database-specific fields (UUID, timestamps)
-- **Frontend Requirements:** Added responsive UI, routing, and component requirements
-- **Backend Requirements:** Added API endpoints, middleware, and authentication verification requirements
+- **Frontend:** Next.js replaced with OpenAI ChatKit
+- **AI Logic:** Added OpenAI Agents SDK for agent orchestration
+- **MCP Server:** Added Official MCP SDK for stateless tool exposure
+- **Architecture:** Traditional CRUD web app → conversational AI
+  chatbot with MCP tool layer
+- **Principles:** Added MCP Tool Discipline (VIII), Conversation
+  State Persistence (IX), AI Agent Boundary Discipline (X)
+- **Scope:** AI/Chatbot features moved from out-of-scope to primary
+  scope
+- **Data Model:** Added Conversation entity for state persistence
+- **Evaluation:** Added hackathon evaluation criteria awareness
 
-**Breaking Changes from Phase 1:**
-- CLI interface replaced with web interface
-- In-memory storage replaced with PostgreSQL
-- Single-user design replaced with multi-user architecture
-- Python-only codebase expanded to TypeScript (frontend) + Python (backend)
+**Breaking Changes from Phase 2:**
+- Next.js frontend replaced with OpenAI ChatKit
+- Traditional UI components removed (TaskList, TaskForm, etc.)
+- Direct API calls replaced with MCP tool invocations via AI agent
+- Added AI agent layer between user and backend
+- Added MCP server layer between agent and database
 
-**Preserved from Phase 1:**
-- All task management features (CRUD, priorities, tags, due dates, recurring tasks)
-- Core SDD principles (specification → plan → tasks → implementation)
-- Code quality standards
-- Simplicity over complexity philosophy
-- Scope discipline
+**Preserved from Phase 2:**
+- FastAPI backend framework
+- SQLModel ORM + Neon PostgreSQL
+- Better Auth authentication
+- Task data model (all fields preserved)
+- User data isolation principles
+- Core SDD principles
+- Security by design
 
-**Out of Scope (Explicit):**
-- AI/Chatbot features
-- Kubernetes/cloud orchestration
-- Background worker processes
-- Admin panels or user management dashboards
+### Version 2.0.0 (2026-01-05)
 
-**Impact:** Enables development of a production-ready, multi-user web application while maintaining SDD discipline and preserving all Phase 1 functionality. All future features must comply with full-stack architecture and security requirements.
+**Amendment:** Complete architectural transformation to full-stack
+web application
+
+**Rationale:** Phase 2 evolved the CLI application into a
+production-ready web application with secure authentication,
+persistent storage, and multi-user support.
+
+**Major Changes:**
+- Added Next.js 16+ (frontend), FastAPI (backend), Neon PostgreSQL
+  (database), Better Auth (authentication)
+- Transformed from single-layer CLI to three-layer full-stack
+- Replaced in-memory storage with persistent PostgreSQL
+- Added stateless JWT-based authentication
+- Added user isolation and data separation
+- Added security-focused principles (VI, VII, VIII)
 
 ### Version 1.2.0 (2026-01-04)
 
-**Amendment:** Extended Task Entity Rules to support advanced task management features
-
-**Rationale:** Enable organizational and productivity features (priorities, tags, due dates, recurring tasks) while maintaining CLI-only and in-memory constraints.
-
-**Changes:**
-- Added Extended Attributes subsection to Task Entity Rules
-- Added priority, tags, due_date, recurrence attributes (all optional)
-- Maintained backward compatibility
-
-**Impact:** Enabled Feature 003 (advanced task management) while maintaining Phase 1 architectural constraints.
+**Amendment:** Extended Task Entity Rules for advanced task management
 
 ### Version 1.1.0 (2026-01-03)
 
-**Amendment:** Updated Principle V from "No Features Beyond Phase I Scope" to "Scope Discipline and Controlled Enhancement"
-
-**Rationale:** Allow controlled feature expansion through proper SDD workflow while maintaining scope discipline.
-
-**Changes:**
-- Renamed Principle V to reflect controlled enhancement approach
-- Added SDD workflow requirement for all new features
-- Maintained core constraints unless explicitly amended
-
-**Impact:** Enabled Feature 002 (search/filter/sort) through proper SDD workflow.
+**Amendment:** Updated Principle V from "No Features Beyond Phase I
+Scope" to "Scope Discipline and Controlled Enhancement"

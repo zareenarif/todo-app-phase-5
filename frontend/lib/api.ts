@@ -13,6 +13,7 @@ import {
   ChatResponse,
   AgentLog,
   LLMHealthCheck,
+  MCPChatResponse,
 } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-production-5055.up.railway.app/api/v1';
@@ -324,4 +325,54 @@ export async function getAgentLogs(limit: number = 20): Promise<AgentLog[]> {
 export async function checkLLMHealth(): Promise<LLMHealthCheck> {
   const response = await fetch(`${API_URL}/agents/health`);
   return handleResponse<LLMHealthCheck>(response);
+}
+
+// ============================================
+// Phase 3: MCP Chat API Methods
+// ============================================
+
+/**
+ * Extract user_id from JWT payload (base64 decode, no verification).
+ */
+export function getUserIdFromJWT(): string | null {
+  const jwt = getJWT();
+  if (!jwt) return null;
+
+  try {
+    const payload = JSON.parse(atob(jwt.split('.')[1]));
+    return payload.user_id || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Send a message to the MCP chat agent.
+ */
+export async function mcpChat(
+  message: string,
+  conversationId?: string | null,
+): Promise<MCPChatResponse> {
+  const jwt = getJWT();
+  const userId = getUserIdFromJWT();
+
+  if (!userId) {
+    throw new Error('Not authenticated');
+  }
+
+  const body: Record<string, string> = { message };
+  if (conversationId) {
+    body.conversation_id = conversationId;
+  }
+
+  const response = await fetch(`${API_URL}/chat/${userId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${jwt}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  return handleResponse<MCPChatResponse>(response);
 }

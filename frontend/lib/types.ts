@@ -113,3 +113,23 @@ export interface LLMHealthCheck {
   primary: { status: string; provider?: string; error?: string };
   fallback: { status: string; provider?: string; error?: string };
 }
+
+// Phase 3: MCP Chat Types
+export interface MCPToolCallRecord {
+  tool_name: string;
+  tool_input: Record<string, unknown>;
+  tool_output: unknown;
+}
+
+export interface MCPChatResponse {
+  conversation_id: string;
+  response: string;
+  tool_calls: MCPToolCallRecord[];
+}
+
+export interface MCPChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  tool_calls?: MCPToolCallRecord[];
+}
