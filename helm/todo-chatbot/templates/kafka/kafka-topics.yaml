@@ -1,0 +1,108 @@
+{{- if and .Values.kafka.enabled (eq .Values.kafka.provider "strimzi") }}
+# =============================================================================
+# Kafka Topics — Strimzi KafkaTopic CRDs
+# Created by Strimzi Entity Operator after Kafka cluster is ready.
+# =============================================================================
+
+# --- Primary Topics ---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: todo.task-events
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ include "todo-chatbot.fullname" . }}-kafka
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka-topic
+spec:
+  partitions: {{ .Values.kafka.topics.taskEvents.partitions | default 3 }}
+  replicas: {{ .Values.kafka.topics.taskEvents.replicas | default 1 }}
+  config:
+    retention.ms: {{ .Values.kafka.topics.taskEvents.retentionMs | default "604800000" }}  # 7 days
+    cleanup.policy: delete
+    segment.ms: 86400000  # 1 day segments
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: todo.task-updates
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ include "todo-chatbot.fullname" . }}-kafka
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka-topic
+spec:
+  partitions: {{ .Values.kafka.topics.taskUpdates.partitions | default 3 }}
+  replicas: {{ .Values.kafka.topics.taskUpdates.replicas | default 1 }}
+  config:
+    retention.ms: {{ .Values.kafka.topics.taskUpdates.retentionMs | default "604800000" }}  # 7 days
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: todo.reminders
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ include "todo-chatbot.fullname" . }}-kafka
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka-topic
+spec:
+  partitions: {{ .Values.kafka.topics.reminders.partitions | default 1 }}
+  replicas: {{ .Values.kafka.topics.reminders.replicas | default 1 }}
+  config:
+    retention.ms: {{ .Values.kafka.topics.reminders.retentionMs | default "259200000" }}  # 3 days
+    cleanup.policy: delete
+
+# --- Dead Letter Topics (DLQ) ---
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: todo.task-events.dlq
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ include "todo-chatbot.fullname" . }}-kafka
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka-topic-dlq
+spec:
+  partitions: 1
+  replicas: {{ .Values.kafka.topics.taskEvents.replicas | default 1 }}
+  config:
+    retention.ms: "2592000000"  # 30 days
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: todo.task-updates.dlq
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ include "todo-chatbot.fullname" . }}-kafka
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka-topic-dlq
+spec:
+  partitions: 1
+  replicas: {{ .Values.kafka.topics.taskUpdates.replicas | default 1 }}
+  config:
+    retention.ms: "2592000000"  # 30 days
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: todo.reminders.dlq
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ include "todo-chatbot.fullname" . }}-kafka
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka-topic-dlq
+spec:
+  partitions: 1
+  replicas: {{ .Values.kafka.topics.reminders.replicas | default 1 }}
+  config:
+    retention.ms: "2592000000"  # 30 days
+    cleanup.policy: delete
+{{- end }}

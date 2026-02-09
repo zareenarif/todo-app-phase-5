@@ -1,0 +1,133 @@
+# Task Event Contracts
+# Defines the event envelope schema for all task-related Kafka events
+# Published via Dapr Pub/Sub to topics: todo.task-events, todo.task-updates
+
+# --- Event Envelope (CloudEvents-compatible) ---
+TaskEvent:
+  type: object
+  required: [id, source, type, time, data]
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique event identifier (for deduplication)
+    source:
+      type: string
+      enum: [todo-backend]
+      description: Event producer identifier
+    type:
+      type: string
+      enum:
+        - task.created
+        - task.updated
+        - task.completed
+        - task.deleted
+      description: Event type
+    time:
+      type: string
+      format: date-time
+      description: ISO 8601 timestamp of when the event occurred
+    data:
+      type: object
+      description: Event-specific payload
+
+# --- Event Data Payloads ---
+
+TaskCreatedData:
+  type: object
+  required: [task_id, user_id, title]
+  properties:
+    task_id:
+      type: string
+      format: uuid
+    user_id:
+      type: string
+      format: uuid
+    title:
+      type: string
+      maxLength: 200
+    description:
+      type: string
+      maxLength: 2000
+      nullable: true
+    priority:
+      type: string
+      enum: [high, medium, low]
+      nullable: true
+    tags:
+      type: array
+      items:
+        type: string
+    due_date:
+      type: string
+      format: date
+      nullable: true
+    recurrence:
+      type: string
+      enum: [daily, weekly, monthly]
+      nullable: true
+    created_at:
+      type: string
+      format: date-time
+
+TaskUpdatedData:
+  type: object
+  required: [task_id, user_id, changes]
+  properties:
+    task_id:
+      type: string
+      format: uuid
+    user_id:
+      type: string
+      format: uuid
+    changes:
+      type: object
+      description: Key-value pairs of changed fields with new values
+    updated_at:
+      type: string
+      format: date-time
+
+TaskCompletedData:
+  type: object
+  required: [task_id, user_id]
+  properties:
+    task_id:
+      type: string
+      format: uuid
+    user_id:
+      type: string
+      format: uuid
+    title:
+      type: string
+    recurrence:
+      type: string
+      enum: [daily, weekly, monthly]
+      nullable: true
+    due_date:
+      type: string
+      format: date
+      nullable: true
+    completed_at:
+      type: string
+      format: date-time
+
+TaskDeletedData:
+  type: object
+  required: [task_id, user_id]
+  properties:
+    task_id:
+      type: string
+      format: uuid
+    user_id:
+      type: string
+      format: uuid
+    title:
+      type: string
+    deleted_at:
+      type: string
+      format: date-time
+
+# --- Topic Mapping ---
+# todo.task-events: task.created, task.completed, task.deleted
+# todo.task-updates: task.updated
+# DLQ: todo.task-events.dlq, todo.task-updates.dlq

@@ -1,0 +1,54 @@
+{{- if .Values.dapr.enabled }}
+# =============================================================================
+# Dapr Configuration — Global sidecar settings
+#
+# Applied to all Dapr sidecars in the namespace via the
+# dapr.io/config annotation on pod templates.
+#
+# Controls: tracing, metrics, API access control, middleware pipeline.
+# =============================================================================
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-dapr-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-configuration
+spec:
+  # --- Tracing ---
+  tracing:
+    samplingRate: {{ .Values.dapr.tracing.samplingRate | default "1" | quote }}
+    {{- if .Values.dapr.tracing.zipkinEndpoint }}
+    zipkin:
+      endpointAddress: {{ .Values.dapr.tracing.zipkinEndpoint | quote }}
+    {{- end }}
+
+  # --- Metrics ---
+  metric:
+    enabled: {{ .Values.dapr.metrics.enabled | default true }}
+    {{- if .Values.dapr.metrics.port }}
+    port: {{ .Values.dapr.metrics.port }}
+    {{- end }}
+
+  # --- API Logging ---
+  logging:
+    apiLogging:
+      enabled: {{ .Values.dapr.logging.apiLogging | default true }}
+      obfuscateURLs: false
+
+  # --- Access Control (restrict which apps can invoke which) ---
+  accessControl:
+    defaultAction: allow
+    trustDomain: "public"
+    policies:
+      # Backend can be invoked by frontend (service invocation)
+      - appId: {{ .Values.dapr.frontendAppId | default "todo-frontend" }}
+        defaultAction: allow
+        trustDomain: "public"
+        namespace: {{ .Release.Namespace }}
+        operations:
+          - name: /api/*
+            httpVerb: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+            action: allow
+{{- end }}

@@ -1,0 +1,210 @@
+# Reminder API Contracts
+# REST API endpoints for reminder management
+# Base path: /api/v1/reminders
+
+openapi: 3.0.3
+info:
+  title: Reminder API
+  version: 1.0.0
+
+paths:
+  /api/v1/reminders:
+    post:
+      operationId: setReminder
+      summary: Set a reminder for a task
+      tags: [reminders]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderCreate'
+      responses:
+        '201':
+          description: Reminder created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderResponse'
+        '400':
+          description: Validation error (task has no due date, invalid lead time, reminder already exists)
+        '404':
+          description: Task not found or not owned by user
+
+    get:
+      operationId: listReminders
+      summary: List all reminders for the authenticated user
+      tags: [reminders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, triggered, cancelled]
+          description: Filter by reminder status
+      responses:
+        '200':
+          description: List of reminders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reminders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReminderResponse'
+                  count:
+                    type: integer
+
+  /api/v1/reminders/{reminder_id}:
+    delete:
+      operationId: cancelReminder
+      summary: Cancel a pending reminder
+      tags: [reminders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reminder_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Reminder cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderResponse'
+        '404':
+          description: Reminder not found or not owned by user
+        '409':
+          description: Reminder already triggered or cancelled
+
+    put:
+      operationId: updateReminder
+      summary: Update a pending reminder's lead time
+      tags: [reminders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reminder_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderUpdate'
+      responses:
+        '200':
+          description: Reminder updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderResponse'
+        '404':
+          description: Reminder not found
+        '409':
+          description: Reminder already triggered or cancelled
+
+components:
+  schemas:
+    ReminderCreate:
+      type: object
+      required: [task_id, lead_time]
+      properties:
+        task_id:
+          type: string
+          format: uuid
+          description: Task to set reminder for (must have due_date)
+        lead_time:
+          type: string
+          enum: ["15min", "30min", "1h", "1d"]
+          description: How far before due_date to fire reminder
+
+    ReminderUpdate:
+      type: object
+      required: [lead_time]
+      properties:
+        lead_time:
+          type: string
+          enum: ["15min", "30min", "1h", "1d"]
+          description: Updated lead time
+
+    ReminderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        task_id:
+          type: string
+          format: uuid
+        remind_at:
+          type: string
+          format: date-time
+        lead_time:
+          type: string
+        status:
+          type: string
+          enum: [pending, triggered, cancelled]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+# --- Reminder Event Contract ---
+ReminderTriggeredEvent:
+  type: object
+  required: [id, source, type, time, data]
+  properties:
+    id:
+      type: string
+      format: uuid
+    source:
+      type: string
+      enum: [todo-reminder-scheduler]
+    type:
+      type: string
+      enum: [reminder.triggered]
+    time:
+      type: string
+      format: date-time
+    data:
+      type: object
+      properties:
+        reminder_id:
+          type: string
+          format: uuid
+        task_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        task_title:
+          type: string
+        due_date:
+          type: string
+          format: date
+
+# --- MCP Tool Contracts ---
+# set_reminder(user_id, task_id, lead_time) → ReminderResponse JSON
+# cancel_reminder(user_id, reminder_id) → ReminderResponse JSON
+# list_reminders(user_id, status?) → {reminders: [...], count: N} JSON

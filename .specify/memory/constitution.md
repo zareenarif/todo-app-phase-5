@@ -1,69 +1,84 @@
-# Todo AI Chatbot Application Constitution (Phase 4)
+# Todo AI Chatbot Application Constitution (Phase 5)
 
 <!--
 Sync Impact Report:
-- Version change: 3.0.0 → 4.0.0
-- Major version increment: Fundamental infrastructure transformation from
-  direct deployment to containerized Local Kubernetes via Minikube
+- Version change: 4.0.0 → 5.0.0
+- Major version increment: Fundamental architectural transformation
+  from local Minikube-only deployment to production-grade,
+  event-driven, cloud-native system with Kafka, Dapr, and CI/CD
 - Breaking changes:
-  - Removed: "Containerization: Not required" constraint
-  - Removed: "No Kubernetes or cloud orchestration" from scope exclusions
-  - Removed: "Kubernetes orchestration" from explicit out-of-scope list
-  - Added: Docker containerization as mandatory (separate images for
-    frontend and backend)
-  - Added: Helm Charts as single source of truth for deployment
-  - Added: Minikube as local Kubernetes target
-  - Added: AI DevOps tooling requirement (Gordon, kubectl-ai, kagent)
-  - Added: Observability and scalability requirements
-  - Added: Pod resilience guarantees
+  - Removed: "Local Only: Minikube is the ONLY deployment target"
+  - Removed: "No Cloud: No AWS, GCP, or Azure resources"
+  - Removed: "No CI/CD: No automated pipeline configuration"
+  - Removed: "No Service Mesh" (Dapr sidecar now required)
+  - Added: Kafka as event backbone (abstracted via Dapr Pub/Sub)
+  - Added: Dapr as distributed application runtime
+  - Added: CI/CD via GitHub Actions (mandatory)
+  - Added: Cloud Kubernetes targets (AKS, GKE, OKE)
+  - Added: Cloud neutrality as non-negotiable constraint
+  - Added: Event-driven architecture as mandatory pattern
 - Modified principles:
-  - Principle IV: Simplicity Over Complexity (updated for K8s/Helm context)
-  - Principle V: Scope Discipline (reframed for infrastructure scope)
+  - Principle IV: Simplicity Over Complexity (updated for
+    event-driven and Dapr context)
+  - Principle V: Scope Discipline (reframed for cloud deployment
+    and event-driven scope)
+  - Principle XI: AI-Generated Infrastructure Only (expanded to
+    include Dapr, Kafka, and CI/CD configs)
+  - Principle XII: Helm as Single Source of Truth (expanded for
+    multi-environment and Dapr components)
+  - Principle XIII: Observable and Resilient Deployment (expanded
+    for distributed tracing and event observability)
 - Added principles:
-  - Principle XI: AI-Generated Infrastructure Only
-  - Principle XII: Helm as Single Source of Truth
-  - Principle XIII: Observable and Resilient Deployment
+  - Principle XIV: Event-Driven Architecture via Dapr
+  - Principle XV: Cloud Neutrality
+  - Principle XVI: Automated CI/CD Pipeline
 - Removed sections:
-  - "Containerization: Not required" constraint
-  - "No Kubernetes or cloud orchestration" constraint
+  - "Local Only" deployment constraint
+  - "No Cloud" constraint
+  - "No CI/CD" constraint
+  - Single Minikube-only deployment architecture
 - Added sections:
-  - Infrastructure Stack, Deployment Architecture, Helm Chart
-    Structure, Observability Requirements, Resilience Guarantees
+  - Event-Driven Architecture, Dapr Components, Kafka
+    Configuration, CI/CD Pipeline, Multi-Environment Strategy,
+    Cloud Provider Targets
 - Templates requiring updates:
-  ⚠ .specify/templates/plan-template.md (pending - constitution check
-    gates need K8s/Helm/Docker alignment)
-  ⚠ .specify/templates/spec-template.md (pending - needs infrastructure
-    deployment sections)
-  ⚠ .specify/templates/tasks-template.md (pending - needs K8s/Helm
-    task types and infra phases)
+  ⚠ .specify/templates/plan-template.md (pending - constitution
+    check gates need Kafka/Dapr/CI-CD/cloud alignment)
+  ⚠ .specify/templates/spec-template.md (pending - needs
+    event-driven and multi-environment sections)
+  ⚠ .specify/templates/tasks-template.md (pending - needs
+    Dapr/Kafka/CI-CD task types and cloud deployment phases)
 - Follow-up TODOs: None
-- Impact: Complete infrastructure transformation to containerized
-  Kubernetes deployment with AI-generated manifests and Helm charts
+- Impact: Complete transformation to production-grade, event-driven,
+  cloud-native deployment with Kafka, Dapr, and automated CI/CD
 -->
 
 ## Purpose
 
 This project follows Spec-Driven Development (SDD). The objective of
-Phase 4 is to deploy the Phase 3 Todo AI Chatbot on a local Kubernetes
-cluster using Minikube, with Helm Charts as the deployment mechanism
-and AI DevOps tools (Docker AI Gordon, kubectl-ai, kagent) driving all
-infrastructure generation.
+Phase 5 is to transform the Todo AI Chatbot into a production-grade,
+event-driven, cloud-native system using Kubernetes, Kafka, and Dapr
+with automated CI/CD via GitHub Actions.
 
 All development decisions MUST be guided by this constitution and the
 approved specification. No implementation may begin until the
 specification, plan, and tasks are agreed upon.
 
-**Phase Transition:** Phase 4 builds upon the Phase 3 AI Chatbot by
-containerizing the frontend and backend separately, packaging them as
-Helm charts, and deploying to a local Minikube Kubernetes cluster. The
-application logic from Phase 3 is preserved; Phase 4 focuses
-exclusively on infrastructure, containerization, and orchestration.
+**Phase Transition:** Phase 5 builds upon the Phase 4 local
+Kubernetes deployment by introducing event-driven architecture
+(Kafka abstracted via Dapr Pub/Sub), distributed application
+runtime (Dapr sidecars), multi-environment deployment (local
+Minikube + production cloud Kubernetes), and automated CI/CD
+pipelines (GitHub Actions). The application logic from Phases 3–4
+is preserved; Phase 5 focuses on event-driven decoupling, cloud
+portability, and production readiness.
 
-**AI DevOps Context:** This phase enforces zero manual infrastructure
-coding. All Dockerfiles, Helm charts, Kubernetes manifests, and
-deployment configurations MUST be generated by AI tools (Claude Code,
-Docker AI Gordon, kubectl-ai, kagent). Human involvement is limited to
-specification, review, and approval.
+**AI Governance Context:** This phase enforces zero manual coding.
+All Helm charts, Dapr component manifests, Kafka configurations,
+CI/CD pipeline definitions, and Kubernetes resources MUST be
+generated by AI tools (Claude Code). Human involvement is limited
+to specification, review, and approval. SpecKit Plus governs scope
+and validation throughout.
 
 ## Core Principles
 
@@ -77,13 +92,15 @@ success looks like.
 - No coding without an approved specification
 - Specifications MUST be concrete and testable
 - Requirements MUST be clear and unambiguous
-- Infrastructure configurations MUST be explicitly defined
-- Deployment behavior MUST include acceptance criteria
+- Infrastructure and event-driven configurations MUST be explicitly
+  defined
+- Deployment behavior across environments MUST include acceptance
+  criteria
 
 **Rationale:** Specifications prevent scope creep, ensure alignment,
-and provide a shared understanding. For Kubernetes deployments,
-specifications serve as contracts between containers, services,
-and the cluster.
+and provide a shared understanding. For cloud-native event-driven
+systems, specifications serve as contracts between services, events,
+and environments.
 
 ### II. Planning Before Coding
 
@@ -93,16 +110,19 @@ achieved technically across the deployment stack.
 
 **Non-negotiable rules:**
 - No coding without an approved implementation plan
-- Plans MUST identify all components (frontend container, backend
-  container, Helm charts, Kubernetes services) and their interactions
-- Plans MUST define container image specifications, resource limits,
-  and service exposure strategies
-- Plans MUST address health checks and readiness probes
-- Plans MUST specify the Helm values hierarchy
+- Plans MUST identify all components (services, Dapr sidecars,
+  Kafka topics, Helm charts, CI/CD stages) and their interactions
+- Plans MUST define event schemas, topic naming conventions, and
+  pub/sub contracts
+- Plans MUST address health checks, readiness probes, and Dapr
+  sidecar readiness
+- Plans MUST specify the Helm values hierarchy for each environment
+  (local, production)
 
 **Rationale:** Planning ensures technical decisions are deliberate
-and documented. It prevents reactive configuration and validates that
-Docker builds, Helm charts, and Kubernetes resources align.
+and documented. It prevents reactive configuration and validates
+that Dapr components, Kafka topics, Helm charts, and CI/CD
+pipelines align with the event-driven architecture.
 
 ### III. Tasks Before Execution
 
@@ -112,13 +132,15 @@ execution begins.
 **Non-negotiable rules:**
 - No execution without a defined task list
 - Each task MUST be independently verifiable
-- Tasks MUST reference specific files, manifests, and charts
-- Tasks MUST specify layer: Dockerfile, Helm chart, Kubernetes
-  manifest, or cluster configuration
+- Tasks MUST reference specific files, manifests, charts, and
+  pipeline definitions
+- Tasks MUST specify layer: Dapr component, Kafka config, Helm
+  chart, CI/CD pipeline, or Kubernetes manifest
 - Tasks MUST identify dependencies
 
-**Rationale:** Task decomposition ensures work is trackable, testable,
-and completable in small increments across infrastructure layers.
+**Rationale:** Task decomposition ensures work is trackable,
+testable, and completable in small increments across infrastructure
+and event-driven layers.
 
 ### IV. Simplicity Over Complexity
 
@@ -126,24 +148,27 @@ The implementation MUST be as simple as possible while meeting all
 requirements. Complexity requires explicit justification.
 
 **Non-negotiable rules:**
-- Use established tools and patterns (Docker, Helm, Minikube,
-  kubectl)
-- No custom orchestration frameworks (use Helm and kubectl)
+- Use established tools and patterns (Kubernetes, Helm, Dapr, Kafka,
+  GitHub Actions)
+- No custom orchestration frameworks beyond Dapr
 - No unnecessary abstraction layers in infrastructure
 - Clear, readable manifests over clever templating
 - Leverage Helm defaults unless requirements demand customization
 - Kubernetes resources MUST use standard API objects (Deployment,
   Service, ConfigMap, Secret)
+- Dapr MUST be used as the sole abstraction over Kafka (no direct
+  Kafka client SDK in application code)
 
 **Rationale:** Simplicity reduces misconfiguration and improves
-debuggability. Standard Kubernetes patterns ensure portability and
-team comprehension.
+debuggability. Dapr provides the necessary abstraction layer over
+Kafka without introducing custom middleware. Standard Kubernetes
+patterns ensure portability across cloud providers.
 
 ### V. Scope Discipline
 
-This project maintains strict scope discipline. Only infrastructure
-and deployment features explicitly defined in the Phase 4
-specification may be implemented.
+This project maintains strict scope discipline. Only infrastructure,
+event-driven, and deployment features explicitly defined in the
+Phase 5 specification may be implemented.
 
 **Non-negotiable rules:**
 - ALL features MUST follow SDD workflow: specification -> plan ->
@@ -151,20 +176,21 @@ specification may be implemented.
 - No features may be added without user-approved specification
 - Follow deployment requirements EXACTLY — no feature creep
 - No application logic changes unless explicitly required for
-  containerization
+  event-driven architecture
 - Explicitly out of scope:
-  - Cloud provider deployments (AWS, GCP, Azure)
-  - CI/CD pipeline configuration
-  - Ingress controllers beyond basic Minikube access
-  - Service mesh (Istio, Linkerd)
-  - Custom operators or CRDs
-  - Production TLS/certificate management
-  - Multi-cluster deployments
-  - Persistent volume provisioners beyond Minikube defaults
+  - Custom Kubernetes operators or CRDs
+  - Service mesh (Istio, Linkerd) — Dapr provides sufficient
+    service-level capabilities
+  - Multi-cluster federation
+  - Custom Kafka connectors or Kafka Streams
+  - Database migration to in-cluster databases
+  - Frontend SSR or edge deployments
+  - Production TLS certificate automation (manual cert setup
+    is acceptable)
 
-**Rationale:** Scope discipline ensures focus on local Kubernetes
-deployment. Every unspecified infrastructure addition adds complexity
-and potential failure points.
+**Rationale:** Scope discipline ensures focus on the event-driven
+cloud-native transformation. Every unspecified addition adds
+complexity and potential failure points across environments.
 
 ### VI. Security by Design
 
@@ -173,22 +199,27 @@ Security MUST be built into every layer of the deployment.
 **Non-negotiable rules:**
 - Secrets MUST be stored in Kubernetes Secrets, never in manifests
   or Helm values committed to version control
+- Secrets MUST NOT be hardcoded in CI/CD pipeline definitions;
+  GitHub Actions secrets MUST be used
 - Container images MUST use non-root users where possible
 - Container images MUST use specific base image tags (no `latest`)
 - Environment variables MUST be injected via ConfigMaps or Secrets
 - CORS policies MUST be explicitly configured
+- Dapr API access MUST be scoped (no wildcard API access policies)
+- Kafka topic ACLs SHOULD restrict producer/consumer access to
+  necessary services
 - Network policies SHOULD restrict inter-pod communication to
   necessary paths
 
 **Rationale:** Security vulnerabilities in infrastructure compromise
-the entire deployment. Container and Kubernetes security is
-foundational.
+the entire deployment. Event-driven systems amplify blast radius
+because a compromised topic affects all subscribers.
 
-### VII. Stateless Server & MCP Tools
+### VII. Stateless Services
 
-The backend server and all MCP tools MUST remain stateless. This
-constraint from Phase 3 is preserved and reinforced by Kubernetes
-deployment patterns.
+All application services MUST remain stateless. This constraint from
+Phase 3 is preserved and reinforced by Kubernetes deployment patterns
+and event-driven architecture.
 
 **Non-negotiable rules:**
 - The FastAPI server MUST be stateless (enabling horizontal scaling)
@@ -197,10 +228,12 @@ deployment patterns.
 - All state MUST be persisted in the database (external to cluster)
 - Kubernetes Deployments (not StatefulSets) MUST be used for
   application pods
+- Event processing MUST be idempotent (duplicate event delivery
+  MUST NOT cause inconsistent state)
 
-**Rationale:** Statelessness enables Kubernetes to freely reschedule,
-restart, and scale pods without data loss or session affinity
-requirements.
+**Rationale:** Statelessness enables Kubernetes to freely
+reschedule, restart, and scale pods without data loss. Event-driven
+idempotency ensures correctness under at-least-once delivery.
 
 ### VIII. MCP Tool Discipline
 
@@ -215,13 +248,13 @@ and task data. This constraint from Phase 3 is preserved unchanged.
 - Tool input/output schemas MUST be explicitly defined
 
 **Rationale:** MCP compliance is preserved from Phase 3. The
-containerization layer MUST NOT alter the application's architectural
-boundaries.
+event-driven and cloud-native layers MUST NOT alter the
+application's architectural boundaries.
 
 ### IX. Conversation State Persistence
 
-Conversation state MUST be persisted in the database. This constraint
-from Phase 3 is preserved unchanged.
+Conversation state MUST be persisted in the database. This
+constraint from Phase 3 is preserved unchanged.
 
 **Non-negotiable rules:**
 - All conversation history MUST be stored in the database
@@ -230,7 +263,8 @@ from Phase 3 is preserved unchanged.
 - No in-memory conversation buffers or caches
 
 **Rationale:** Kubernetes pod restarts are expected behavior.
-Database-backed persistence ensures conversation continuity.
+Database-backed persistence ensures conversation continuity across
+environments.
 
 ### X. AI Agent Boundary Discipline
 
@@ -244,30 +278,32 @@ from Phase 3 is preserved unchanged.
 - The agent MUST NOT access the database directly
 
 **Rationale:** Clean agent boundaries are preserved from Phase 3.
-Containerization MUST NOT blur architectural responsibilities.
+Event-driven infrastructure MUST NOT blur architectural
+responsibilities.
 
 ### XI. AI-Generated Infrastructure Only
 
 All infrastructure artifacts MUST be generated by AI tools. No
-manual coding of Dockerfiles, Helm charts, or Kubernetes manifests
-by humans is permitted.
+manual coding of Helm charts, Dapr components, Kafka configs,
+CI/CD pipelines, or Kubernetes manifests by humans is permitted.
 
 **Non-negotiable rules:**
-- ALL Dockerfiles MUST be generated by AI (Claude Code or Docker
-  AI Gordon)
-- ALL Helm charts MUST be generated by AI (Claude Code or
-  kubectl-ai)
+- ALL Dockerfiles MUST be generated by AI (Claude Code)
+- ALL Helm charts MUST be generated by AI (Claude Code)
+- ALL Dapr component manifests MUST be generated by AI (Claude Code)
+- ALL Kafka topic configuration MUST be generated by AI
+- ALL CI/CD pipeline definitions (GitHub Actions workflows) MUST be
+  generated by AI (Claude Code)
 - ALL Kubernetes manifests MUST be generated by AI tools
 - Human role is LIMITED to: specification, review, approval, and
   execution of AI-generated commands
-- AI DevOps tools (Gordon, kubectl-ai, kagent) MUST be used where
-  they provide capability
-- Claude Code is the primary code generation agent for all
-  infrastructure artifacts
+- Claude Code is the sole code generation agent for all
+  infrastructure and application artifacts
 
-**Rationale:** Phase 4 validates AI-driven DevOps workflows. Human
-manual infrastructure coding defeats the purpose of the agentic
-dev stack. AI generation ensures reproducibility and consistency.
+**Rationale:** Phase 5 validates AI-driven cloud-native DevOps
+workflows. Human manual infrastructure coding defeats the purpose
+of the agentic dev stack. AI generation ensures reproducibility
+and consistency across environments.
 
 ### XII. Helm as Single Source of Truth
 
@@ -278,8 +314,10 @@ manifests is permitted for application resources.
 **Non-negotiable rules:**
 - ALL application Kubernetes resources MUST be defined in Helm
   charts
+- ALL Dapr component resources MUST be included in Helm charts
 - Helm values.yaml MUST be the single configuration surface
 - Environment-specific overrides MUST use Helm values files
+  (e.g., values-local.yaml, values-production.yaml)
 - No standalone YAML manifests for application resources (all MUST
   be Helm templates)
 - Helm releases MUST be used for install, upgrade, and rollback
@@ -287,27 +325,106 @@ manifests is permitted for application resources.
 
 **Rationale:** Helm provides declarative, versioned, reproducible
 deployments. A single source of truth prevents configuration drift
-and ensures all cluster state is trackable and reversible.
+across local and production environments and ensures all cluster
+state is trackable and reversible.
 
 ### XIII. Observable and Resilient Deployment
 
 All deployed resources MUST be observable and MUST survive expected
-failure scenarios.
+failure scenarios across all environments.
 
 **Non-negotiable rules:**
 - ALL pods MUST define health checks (liveness and readiness probes)
 - ALL pods MUST reach Running state for deployment to be considered
   successful
-- ALL services MUST be accessible via Minikube (NodePort or
-  minikube service)
+- ALL services MUST be accessible via appropriate mechanisms
+  (NodePort for Minikube, LoadBalancer/Ingress for cloud)
 - System MUST survive pod restarts without data loss
 - Resource requests and limits MUST be defined for all containers
 - Pod logs MUST be accessible via kubectl logs
 - Deployment rollout status MUST be verifiable via kubectl
+- Dapr sidecar health MUST be monitored alongside application
+  health
+- Kafka consumer lag MUST be observable
+- Distributed tracing SHOULD be enabled via Dapr observability
 
 **Rationale:** Observability and resilience are fundamental to
-Kubernetes operations. Without health checks and resource governance,
-deployments are fragile and undebuggable.
+production Kubernetes operations. Event-driven systems require
+additional observability (consumer lag, event throughput, dead
+letter queues) beyond basic pod health.
+
+### XIV. Event-Driven Architecture via Dapr
+
+All inter-service communication beyond synchronous API calls MUST
+use event-driven patterns via Dapr Pub/Sub backed by Kafka.
+
+**Non-negotiable rules:**
+- Kafka MUST be the event backbone for all asynchronous
+  communication
+- Application code MUST NOT use Kafka client SDKs directly; all
+  Kafka interaction MUST be abstracted through Dapr Pub/Sub
+- Services MUST be loosely coupled — no direct service-to-service
+  dependencies for event-driven workflows
+- Event schemas MUST be explicitly defined and versioned
+- Dapr component manifests MUST define pub/sub, bindings, and
+  state stores as needed
+- Dead letter topics MUST be configured for failed event processing
+- Event processing MUST be idempotent
+
+**Rationale:** Dapr abstracts Kafka complexity, enabling cloud
+portability (Dapr can swap backends without application changes).
+Loose coupling via events enables independent scaling, deployment,
+and evolution of services.
+
+### XV. Cloud Neutrality
+
+The system MUST be deployable on any major cloud Kubernetes provider
+without cloud-specific lock-in in application or infrastructure
+code.
+
+**Non-negotiable rules:**
+- Application code MUST NOT import or reference cloud-specific SDKs
+  (no AWS SDK, no Azure SDK, no GCP SDK in application logic)
+- Infrastructure configurations MUST use Kubernetes-native
+  abstractions (Services, Ingress, PVCs) rather than cloud-specific
+  resources
+- Helm charts MUST parameterize cloud-specific values (storage
+  classes, load balancer annotations) via values files
+- The system MUST work on:
+  - Local: Minikube
+  - Production: AKS (Azure), GKE (Google), or OKE (Oracle)
+- Cloud-specific configuration MUST be isolated to environment
+  values files only
+- Dapr enables runtime portability — switching cloud providers
+  MUST NOT require application code changes
+
+**Rationale:** Cloud neutrality prevents vendor lock-in and enables
+the organization to choose the most cost-effective or
+policy-compliant provider. Dapr and Kubernetes provide the portable
+abstraction layers.
+
+### XVI. Automated CI/CD Pipeline
+
+All build, test, and deployment workflows MUST be automated via
+GitHub Actions. No manual deployment steps are permitted in
+production.
+
+**Non-negotiable rules:**
+- CI pipeline MUST: lint, test, build Docker images, push to
+  container registry
+- CD pipeline MUST: deploy to target Kubernetes cluster via Helm
+- Pipeline definitions MUST be versioned in the repository
+- Secrets MUST be managed via GitHub Actions secrets (never
+  hardcoded)
+- Pipeline MUST support environment-specific deployments (staging,
+  production)
+- Pipeline MUST include rollback capability
+- Docker images MUST be tagged with commit SHA and semantic version
+- Pipeline MUST gate deployments on successful CI checks
+
+**Rationale:** Automated CI/CD eliminates human error in deployment,
+ensures consistency, and provides audit trails. It is a
+prerequisite for production-grade operations.
 
 ## Technology Stack
 
@@ -322,17 +439,19 @@ as specified:
 - **Database:** Neon Serverless PostgreSQL (external to cluster)
 - **Authentication:** Better Auth
 
-### Infrastructure (Phase 4 — NEW)
-- **Container Runtime:** Docker Desktop
-- **Container AI:** Docker AI Agent (Gordon) for Dockerfile
-  generation and optimization
-- **Kubernetes Distribution:** Minikube (local cluster)
+### Infrastructure (Phase 5 — Updated from Phase 4)
+- **Container Runtime:** Docker
+- **Kubernetes Distribution:**
+  - Local: Minikube
+  - Production: AKS, GKE, or OKE
 - **Package Manager:** Helm 3 (chart-based deployment)
-- **Cluster CLI:** kubectl + kubectl-ai (AI-assisted kubectl)
-- **Agent Orchestration:** kagent (AI agent for Kubernetes
-  operations)
-- **Registry:** Local Docker images (minikube image load or
-  minikube docker-env)
+- **Cluster CLI:** kubectl
+- **Event Backbone:** Apache Kafka
+- **Distributed Runtime:** Dapr (sidecar-based)
+- **Pub/Sub Abstraction:** Dapr Pub/Sub component (Kafka backend)
+- **Container Registry:** Cloud provider registry (ACR, GCR, OCIR)
+  or GitHub Container Registry
+- **CI/CD:** GitHub Actions
 
 ### Development & Tooling
 - **Spec-Driven Development:** Claude Code + SpecKit Plus
@@ -342,11 +461,10 @@ as specified:
 - **Environment Variables:** Kubernetes Secrets and ConfigMaps
   (never committed to version control)
 
-**Rationale:** This stack enables fully AI-driven local Kubernetes
-deployment. Docker AI (Gordon) generates optimized Dockerfiles,
-kubectl-ai assists with cluster operations, kagent provides
-AI-powered Kubernetes management, and Helm ensures reproducible
-deployments.
+**Rationale:** This stack enables fully AI-driven, event-driven,
+cloud-native deployment. Dapr abstracts Kafka, Helm ensures
+reproducible multi-environment deployments, and GitHub Actions
+automates the delivery pipeline.
 
 ## Technical Constraints
 
@@ -357,11 +475,13 @@ deployments.
   to minimize image size
 - **Non-root:** Containers SHOULD run as non-root users
 - **Pinned Base Images:** Base images MUST use specific version tags
+- **Registry Tagging:** Images MUST be tagged with commit SHA and
+  semantic version
 
 ### Kubernetes Architecture
 - **Namespace:** Application MUST deploy to a dedicated namespace
 - **Deployments:** Application pods MUST use Deployment resources
-  (not StatefulSets or DaemonSets)
+  (not StatefulSets or DaemonSets) for application services
 - **Services:** Each Deployment MUST have a corresponding Service
 - **ConfigMaps:** Non-sensitive configuration MUST use ConfigMaps
 - **Secrets:** Sensitive values (API keys, database URLs) MUST use
@@ -370,16 +490,41 @@ deployments.
   requests and limits
 - **Health Checks:** All containers MUST define liveness and
   readiness probes
+- **Dapr Annotations:** Application pods MUST include Dapr sidecar
+  annotations for pub/sub participation
 
-### Helm Chart Structure
-- **Chart per Application:** One Helm chart for the entire todo
-  application (with subcharts or templates for frontend/backend)
-- **Values Hierarchy:** Default values in values.yaml, overrides
-  via --set or -f flags
-- **Template Helpers:** Common labels, selectors, and names in
-  _helpers.tpl
-- **NOTES.txt:** Post-install instructions for accessing the
-  application
+### Event-Driven Architecture
+- **Kafka Deployment:** Kafka MUST run as a StatefulSet within the
+  cluster (via Helm chart, e.g., Bitnami Kafka) or use a managed
+  Kafka service in production
+- **Dapr Components:** Pub/Sub component MUST be defined as a Dapr
+  component manifest referencing the Kafka broker
+- **Topic Naming:** Topics MUST follow the convention
+  `<namespace>.<service>.<event-type>` (e.g.,
+  `todo.tasks.created`)
+- **Dead Letter Topics:** Every subscription MUST define a dead
+  letter topic for failed processing
+- **Event Schema:** Events MUST use a consistent envelope:
+  `{id, source, type, timestamp, data}`
+
+### Dapr Configuration
+- **Sidecar Injection:** Dapr MUST be installed via Helm chart
+  with sidecar injector enabled
+- **Component Scoping:** Dapr components MUST be scoped to
+  specific applications (no global pub/sub access)
+- **API Access:** Dapr HTTP/gRPC API MUST be used for pub/sub
+  operations from application code
+- **Resiliency:** Dapr resiliency policies SHOULD define retry
+  and circuit breaker configurations
+
+### CI/CD Pipeline Structure
+- **Workflow Files:** `.github/workflows/` directory
+- **CI Workflow:** Triggered on push/PR to main branch
+  - Lint, test, build images, push to registry
+- **CD Workflow:** Triggered on successful CI or tag creation
+  - Deploy to target environment via Helm
+- **Environment Secrets:** Managed via GitHub Actions secrets
+- **Branch Protection:** Main branch MUST require passing CI
 
 ### Database Constraints (Preserved from Phase 3)
 - **External Database:** Neon PostgreSQL runs OUTSIDE the cluster
@@ -388,39 +533,51 @@ deployments.
 - **User Isolation:** Every user-data table MUST have `user_id`
 
 ### Deployment Constraints
-- **Local Only:** Minikube is the ONLY deployment target
-- **No Cloud:** No AWS, GCP, or Azure resources
-- **No CI/CD:** No automated pipeline configuration
-- **No Service Mesh:** No Istio or Linkerd
-- **No Ingress Controller:** Use NodePort or minikube service for
-  access
+- **Multi-Environment:** System MUST deploy to both local
+  (Minikube) and production (cloud Kubernetes)
+- **Cloud Targets:** AKS, GKE, or OKE (one or more)
+- **No Cloud Lock-in:** No cloud-provider-specific code in
+  application logic
+- **No Custom Operators:** No custom CRDs or operators
+- **No Service Mesh:** Dapr provides sufficient sidecar-based
+  capabilities; no Istio or Linkerd
 
 ## Deployment Architecture
 
-### Container Layout
+### Event-Driven Container Layout
+
 ```
-┌─────────────────────────────────────────────┐
-│              Minikube Cluster                │
-│                                             │
-│  ┌──────────────┐    ┌──────────────────┐   │
-│  │   Frontend    │    │    Backend        │   │
-│  │   Deployment  │    │    Deployment     │   │
-│  │  (Next.js)    │    │   (FastAPI +      │   │
-│  │              │    │    MCP + Agent)    │   │
-│  └──────┬───────┘    └────────┬──────────┘   │
-│         │                     │              │
-│  ┌──────┴───────┐    ┌───────┴──────────┐   │
-│  │   Frontend    │    │    Backend        │   │
-│  │   Service     │    │    Service        │   │
-│  │  (NodePort)   │    │   (ClusterIP/     │   │
-│  │              │    │    NodePort)       │   │
-│  └──────────────┘    └──────────────────┘   │
-│                                             │
-│  ┌──────────────┐    ┌──────────────────┐   │
-│  │  ConfigMap    │    │   Secret          │   │
-│  │  (app config) │    │  (API keys, DB)   │   │
-│  └──────────────┘    └──────────────────┘   │
-└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│              Kubernetes Cluster (Minikube / AKS / GKE / OKE)│
+│                                                             │
+│  ┌────────────────────┐    ┌────────────────────────────┐   │
+│  │  Frontend Pod       │    │  Backend Pod                │   │
+│  │  ┌──────────────┐  │    │  ┌──────────────────────┐  │   │
+│  │  │  Next.js App  │  │    │  │  FastAPI + MCP +     │  │   │
+│  │  │              │  │    │  │  Agent + Dapr SDK     │  │   │
+│  │  └──────────────┘  │    │  └──────────────────────┘  │   │
+│  │  ┌──────────────┐  │    │  ┌──────────────────────┐  │   │
+│  │  │  Dapr Sidecar │  │    │  │  Dapr Sidecar         │  │   │
+│  │  └──────────────┘  │    │  └──────────┬───────────┘  │   │
+│  └────────┬───────────┘    └─────────────┼──────────────┘   │
+│           │                              │                  │
+│  ┌────────┴───────────┐    ┌─────────────┴──────────────┐   │
+│  │  Frontend Service   │    │  Backend Service            │   │
+│  └────────────────────┘    └────────────────────────────┘   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                  Kafka (StatefulSet)                  │    │
+│  │  Topics: todo.tasks.created, todo.tasks.updated,     │    │
+│  │          todo.tasks.deleted, todo.tasks.dlq           │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐    │
+│  │  Dapr System  │  │  ConfigMap    │  │  Secret         │    │
+│  │  (Operator +  │  │  (app config) │  │  (API keys, DB) │    │
+│  │   Sidecar     │  └──────────────┘  └────────────────┘    │
+│  │   Injector)   │                                          │
+│  └──────────────┘                                           │
+└─────────────────────────────────────────────────────────────┘
                          │
                          ▼
               ┌──────────────────┐
@@ -429,10 +586,17 @@ deployments.
               └──────────────────┘
 ```
 
-### Access Pattern
-1. User accesses frontend via `minikube service frontend`
-2. Frontend communicates with backend via Kubernetes Service DNS
-3. Backend connects to external Neon PostgreSQL via Secret
+### Access Patterns
+1. **Local (Minikube):** User accesses frontend via
+   `minikube service frontend` or NodePort
+2. **Production (Cloud):** User accesses frontend via
+   LoadBalancer or Ingress
+3. Frontend communicates with backend via Kubernetes Service DNS
+4. Backend publishes events via Dapr Pub/Sub API (Dapr sidecar
+   forwards to Kafka)
+5. Backend subscribes to events via Dapr subscription
+   configuration
+6. Backend connects to external Neon PostgreSQL via Secret
 
 ## Helm Chart Structure
 
@@ -440,6 +604,8 @@ deployments.
 helm/todo-chatbot/
 ├── Chart.yaml              # Chart metadata and version
 ├── values.yaml             # Default configuration values
+├── values-local.yaml       # Minikube-specific overrides
+├── values-production.yaml  # Cloud Kubernetes overrides
 ├── templates/
 │   ├── _helpers.tpl        # Template helper functions
 │   ├── NOTES.txt           # Post-install access instructions
@@ -448,9 +614,40 @@ helm/todo-chatbot/
 │   ├── backend-deployment.yaml
 │   ├── backend-service.yaml
 │   ├── configmap.yaml
-│   └── secret.yaml
+│   ├── secret.yaml
+│   ├── dapr-pubsub.yaml    # Dapr Pub/Sub component
+│   ├── dapr-subscription.yaml  # Dapr topic subscriptions
+│   └── kafka/              # Kafka StatefulSet (or dependency)
 └── .helmignore
 ```
+
+## CI/CD Pipeline Structure
+
+```
+.github/workflows/
+├── ci.yaml                 # Lint, test, build, push images
+├── cd-staging.yaml         # Deploy to staging environment
+└── cd-production.yaml      # Deploy to production environment
+```
+
+### Pipeline Flow
+```
+Push/PR → CI (lint → test → build → push) → CD (helm upgrade)
+```
+
+## Dapr Component Configuration
+
+### Pub/Sub Component (Kafka)
+- **Component Name:** `pubsub-kafka`
+- **Type:** `pubsub.kafka`
+- **Broker:** In-cluster Kafka service or managed Kafka endpoint
+- **Scoped to:** Backend service only
+
+### Event Topics
+- `todo.tasks.created` — Published when a task is created
+- `todo.tasks.updated` — Published when a task is modified
+- `todo.tasks.deleted` — Published when a task is removed
+- `todo.tasks.dlq` — Dead letter queue for failed processing
 
 ## Observability Requirements
 
@@ -462,6 +659,12 @@ helm/todo-chatbot/
   successful deployment
 - **Resource Monitoring:** `kubectl top pods` MUST show resource
   usage within defined limits
+- **Dapr Dashboard:** Dapr dashboard SHOULD be accessible for
+  sidecar and component health inspection
+- **Kafka Monitoring:** Consumer lag and topic throughput MUST be
+  observable via metrics or CLI tools
+- **Distributed Tracing:** Dapr tracing SHOULD be enabled for
+  end-to-end request tracking across services
 
 ## Resilience Guarantees
 
@@ -472,6 +675,12 @@ helm/todo-chatbot/
 - **Rollback:** `helm rollback` MUST restore previous working state
 - **Stateless Validation:** Killing and recreating pods MUST NOT
   cause data loss (all state in external database)
+- **Event Replay:** Kafka retention MUST allow event replay for
+  recovery scenarios
+- **Dead Letter Handling:** Failed events MUST be routed to DLQ
+  topics and MUST NOT block processing of subsequent events
+- **Dapr Resiliency:** Retry and circuit breaker policies SHOULD
+  protect against transient failures
 
 ## Environment Variables (REQUIRED)
 
@@ -486,6 +695,8 @@ Injected via Kubernetes Secrets and ConfigMaps:
 - `CORS_ORIGINS` — Allowed frontend origins
 - `BACKEND_URL` — Internal backend service URL for frontend
 - `PORT` — Application port (backend: 8000, frontend: 3000)
+- `DAPR_HTTP_PORT` — Dapr sidecar HTTP port (default: 3500)
+- `KAFKA_BROKERS` — Kafka broker addresses (for Dapr component)
 
 ## Quality Standards
 
@@ -495,6 +706,9 @@ Injected via Kubernetes Secrets and ConfigMaps:
 - All Kubernetes resources MUST pass `kubectl apply --dry-run`
 - Resource names MUST follow Kubernetes naming conventions
 - Labels MUST include app, component, and version
+- Dapr component manifests MUST pass validation
+- CI/CD pipelines MUST pass syntax validation
+- GitHub Actions workflows MUST use pinned action versions
 
 **Application (Preserved from Phase 3):**
 - Type hints on all functions
@@ -510,17 +724,24 @@ Injected via Kubernetes Secrets and ConfigMaps:
 ## Testing Requirements
 
 **Deployment Verification (REQUIRED):**
-- Minikube cluster starts successfully
+- Minikube cluster starts successfully with Dapr installed
 - Docker images build without errors
-- Helm install completes without errors
-- All pods reach Running state
+- Helm install completes without errors (local and production)
+- All pods reach Running state (including Dapr sidecars)
+- Dapr sidecar injection is functioning
+- Kafka broker is running and topics are created
 - All services have valid endpoints
-- Frontend is accessible via minikube service
+- Frontend is accessible via appropriate mechanism per environment
 - Backend API responds to health check
+- Dapr Pub/Sub publishes and subscribes successfully
+- Event flow: task creation triggers event → Kafka → subscriber
+- Dead letter topic receives failed events
 - End-to-end user flow works through Kubernetes services
 - Pod restart does not cause data loss
 - Helm upgrade performs rolling update
 - Helm rollback restores previous state
+- CI pipeline completes successfully
+- CD pipeline deploys to target environment
 
 ## Governance
 
@@ -533,9 +754,13 @@ taking effect.
   this constitution
 - Any complexity introduced MUST be justified explicitly
 - ALL code and infrastructure generation MUST be performed by AI
-  tools (no manual coding by humans)
+  tools (Claude Code — no manual coding by humans)
+- SpecKit Plus governs scope and validation throughout
 - Helm chart compliance MUST be verified at every stage
 - Kubernetes resource compliance MUST be validated with dry-run
+- Dapr component compliance MUST be verified via Dapr CLI
+- CI/CD pipeline compliance MUST be verified via workflow syntax
+  checks
 
 **Amendment Process:**
 - Amendments require explicit documentation of change and rationale
@@ -547,45 +772,48 @@ taking effect.
 - All active features MUST be reviewed for compliance after
   amendments
 
-**Version:** 4.0.0 | **Ratified:** 2026-01-05 | **Last Amended:** 2026-02-09
+**Version:** 5.0.0 | **Ratified:** 2026-01-05 | **Last Amended:** 2026-02-09
 
 ## Amendment History
 
-### Version 4.0.0 (2026-02-09)
+### Version 5.0.0 (2026-02-09)
 
-**Amendment:** Complete infrastructure transformation to containerized
-Local Kubernetes deployment via Minikube with AI-generated artifacts
+**Amendment:** Complete transformation to production-grade,
+event-driven, cloud-native system with Kafka, Dapr, CI/CD, and
+multi-cloud Kubernetes deployment
 
-**Rationale:** Phase 4 deploys the Phase 3 AI Chatbot to a local
-Kubernetes cluster. The application logic is preserved unchanged;
-this phase focuses on containerization (Docker), orchestration
-(Kubernetes/Minikube), packaging (Helm), and AI-driven DevOps
-tooling (Gordon, kubectl-ai, kagent).
+**Rationale:** Phase 5 evolves the Phase 4 local Kubernetes
+deployment into a production-grade, event-driven, cloud-native
+system. The application logic is preserved; this phase focuses on
+event-driven architecture (Kafka via Dapr), cloud portability
+(AKS/GKE/OKE), automated CI/CD (GitHub Actions), and production
+readiness.
 
 **Major Changes:**
-- **Infrastructure:** Added Docker containerization, Minikube,
-  Helm Charts
-- **AI DevOps:** Added Docker AI Gordon, kubectl-ai, kagent as
-  required tools
-- **Principles:** Added AI-Generated Infrastructure Only (XI),
-  Helm as Single Source of Truth (XII), Observable and Resilient
-  Deployment (XIII)
-- **Scope:** Kubernetes orchestration moved from out-of-scope to
-  primary scope (local only)
-- **Deployment:** Defined container layout, Helm chart structure,
-  access patterns
-- **Observability:** Added health checks, logging, and monitoring
-  requirements
-- **Resilience:** Added pod restart survival and rolling update
-  guarantees
+- **Event-Driven:** Added Kafka as event backbone, Dapr as
+  distributed runtime, Pub/Sub as inter-service communication
+- **Cloud Deployment:** Added AKS, GKE, OKE as production targets
+  alongside Minikube for local
+- **CI/CD:** Added GitHub Actions for automated build, test, and
+  deployment pipelines
+- **Cloud Neutrality:** Added as non-negotiable principle — no
+  cloud-specific lock-in in application code
+- **Principles:** Added Event-Driven Architecture via Dapr (XIV),
+  Cloud Neutrality (XV), Automated CI/CD Pipeline (XVI)
+- **Observability:** Expanded for Kafka monitoring, Dapr dashboard,
+  distributed tracing
+- **Resilience:** Expanded for event replay, dead letter handling,
+  Dapr resiliency policies
 
-**Breaking Changes from Phase 3:**
-- Containerization now required (was "Not required")
-- Kubernetes orchestration now primary scope (was out of scope)
-- Secrets management moved to Kubernetes Secrets (was .env files)
-- Deployment target is Minikube cluster (was direct process)
+**Breaking Changes from Phase 4:**
+- Cloud deployment now in scope (was "No Cloud" constraint)
+- CI/CD now required (was "No CI/CD" constraint)
+- Event-driven architecture now mandatory (was not present)
+- Dapr sidecar injection required on all application pods
+- Kafka StatefulSet required in cluster
+- Multi-environment Helm values required (was single environment)
 
-**Preserved from Phase 3:**
+**Preserved from Phase 4:**
 - All application logic (FastAPI, MCP, OpenAI Agents SDK)
 - ChatKit frontend
 - SQLModel ORM + Neon PostgreSQL
@@ -593,17 +821,24 @@ tooling (Gordon, kubectl-ai, kagent).
 - MCP tool architecture
 - Conversation state persistence
 - AI agent boundary discipline
-- All data models unchanged
+- Docker containerization
+- Helm as single source of truth
 - Core SDD principles (I, II, III)
+- AI-generated infrastructure only (expanded)
+
+### Version 4.0.0 (2026-02-09)
+
+**Amendment:** Complete infrastructure transformation to
+containerized Local Kubernetes deployment via Minikube with
+AI-generated artifacts
+
+**Rationale:** Phase 4 deployed the Phase 3 AI Chatbot to a local
+Kubernetes cluster with Docker, Helm, and AI DevOps tooling.
 
 ### Version 3.0.0 (2026-02-08)
 
 **Amendment:** Complete architectural transformation to AI-powered
 conversational chatbot with MCP architecture
-
-**Rationale:** Phase 3 evolved the full-stack web application into
-an AI-powered conversational todo chatbot with MCP-compliant
-stateless tool architecture.
 
 ### Version 2.0.0 (2026-01-05)
 
@@ -612,7 +847,8 @@ web application
 
 ### Version 1.2.0 (2026-01-04)
 
-**Amendment:** Extended Task Entity Rules for advanced task management
+**Amendment:** Extended Task Entity Rules for advanced task
+management
 
 ### Version 1.1.0 (2026-01-03)
 

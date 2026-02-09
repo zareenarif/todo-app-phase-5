@@ -1,0 +1,58 @@
+{{- if .Values.dapr.enabled }}
+# =============================================================================
+# Dapr Subscriptions — Route Kafka topics to backend event handler endpoints.
+# Each subscription maps a topic → handler route on the backend.
+# Dead letter topics configured for retry exhaustion.
+# =============================================================================
+
+# --- Subscription: todo.task-events ---
+# Consumers: AuditService, RecurrenceService, ReminderSuppression
+apiVersion: dapr.io/v2alpha1
+kind: Subscription
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-task-events-sub
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-subscription
+spec:
+  pubsubname: {{ .Values.dapr.pubsub.name | default "pubsub-kafka" }}
+  topic: todo.task-events
+  routes:
+    default: /events/task-events
+  deadLetterTopic: todo.task-events.dlq
+---
+# --- Subscription: todo.task-updates ---
+# Consumers: AuditService
+apiVersion: dapr.io/v2alpha1
+kind: Subscription
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-task-updates-sub
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-subscription
+spec:
+  pubsubname: {{ .Values.dapr.pubsub.name | default "pubsub-kafka" }}
+  topic: todo.task-updates
+  routes:
+    default: /events/task-updates
+  deadLetterTopic: todo.task-updates.dlq
+---
+# --- Subscription: todo.reminders ---
+# Consumers: ReminderService
+apiVersion: dapr.io/v2alpha1
+kind: Subscription
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-reminders-sub
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-subscription
+spec:
+  pubsubname: {{ .Values.dapr.pubsub.name | default "pubsub-kafka" }}
+  topic: todo.reminders
+  routes:
+    default: /events/reminders
+  deadLetterTopic: todo.reminders.dlq
+{{- end }}

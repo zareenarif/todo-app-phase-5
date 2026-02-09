@@ -1,0 +1,142 @@
+# =============================================================================
+# Production Cloud Overrides — Managed Kafka (Redpanda Cloud / Confluent Cloud)
+# Usage: helm install todo-chatbot helm/todo-chatbot/ -f helm/todo-chatbot/values-production.yaml
+# =============================================================================
+
+# -- Kafka (External Managed — Redpanda Cloud) --------------------------------
+kafka:
+  enabled: false                # No in-cluster Kafka; use managed service
+  provider: "external"
+  brokers: "REPLACE_WITH_REDPANDA_CLOUD_BOOTSTRAP_URL:9092"
+
+  auth:
+    enabled: true
+    type: "password"
+    username: "REPLACE_WITH_SASL_USERNAME"
+    mechanism: "SCRAM-SHA-256"
+    secretName: "kafka-credentials"   # kubectl create secret generic kafka-credentials ...
+    secretKey: "password"
+  tls:
+    enabled: true
+
+  # Topics pre-created in Redpanda Cloud console or via rpk
+  topics:
+    taskEvents:
+      partitions: 3
+      replicas: 3
+      retentionMs: "604800000"
+    taskUpdates:
+      partitions: 3
+      replicas: 3
+      retentionMs: "604800000"
+    reminders:
+      partitions: 1
+      replicas: 3
+      retentionMs: "259200000"
+
+# -- Dapr Configuration -------------------------------------------------------
+dapr:
+  enabled: true
+  appId: "todo-backend"
+  appPort: 8000
+
+  pubsub:
+    name: "pubsub-kafka"
+    consumerGroup: "todo-backend-group"
+    clientID: "todo-backend-prod"
+    maxRetryCount: "5"            # More retries in production
+    retryInterval: "2000ms"
+    maxMessageBytes: "1048576"
+    requiredAcks: "all"
+
+  resiliency:
+    retry:
+      maxRetries: 5
+      initialDuration: "2s"
+      maxInterval: "30s"
+    circuitBreaker:
+      maxRequests: 3
+      interval: "60s"
+      timeout: "120s"
+      tripThreshold: 10
+    timeout: "15s"
+
+# -- Frontend (Production) ----------------------------------------------------
+frontend:
+  replicaCount: 2
+
+  image:
+    repository: "ghcr.io/REPLACE_WITH_ORG/todo-frontend"
+    tag: "latest"
+    pullPolicy: Always
+
+  service:
+    type: LoadBalancer
+    port: 3000
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+# -- Backend (Production) -----------------------------------------------------
+backend:
+  replicaCount: 2
+
+  image:
+    repository: "ghcr.io/REPLACE_WITH_ORG/todo-backend"
+    tag: "latest"
+    pullPolicy: Always
+
+  service:
+    type: ClusterIP
+    port: 8000
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+# -- Application Config -------------------------------------------------------
+config:
+  corsOrigins: "https://REPLACE_WITH_PRODUCTION_DOMAIN"
+  debug: "False"
+  backendPort: "8000"
+  frontendPort: "3000"
+  llmProvider: "groq"
+  groqModel: "llama-3.3-70b-versatile"
+  daprPubsubName: "pubsub-kafka"
+  daprHttpPort: "3500"
+
+# -- Secrets (reference to externally created K8s Secrets) --------------------
+secrets:
+  existingSecret: todo-secrets
+
+# -- Image Pull Secrets (for private registries) ------------------------------
+imagePullSecrets:
+  - name: ghcr-pull-secret
+
+# -- Ingress (optional, for cloud load balancer) ------------------------------
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: "REPLACE_WITH_PRODUCTION_DOMAIN"
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+        - path: /api
+          pathType: Prefix
+          service: backend
+  tls:
+    - secretName: todo-tls-cert
+      hosts:
+        - "REPLACE_WITH_PRODUCTION_DOMAIN"

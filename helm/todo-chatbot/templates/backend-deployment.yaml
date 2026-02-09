@@ -15,7 +15,15 @@ spec:
       labels:
         {{- include "todo-chatbot.labels" . | nindent 8 }}
         {{- include "todo-chatbot.selectorLabels.backend" . | nindent 8 }}
+      {{- if .Values.dapr.enabled }}
+      annotations:
+        {{- include "todo-chatbot.dapr.annotations.backend" . | nindent 8 }}
+      {{- end }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
