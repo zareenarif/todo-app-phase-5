@@ -15,7 +15,15 @@ spec:
       labels:
         {{- include "todo-chatbot.labels" . | nindent 8 }}
         {{- include "todo-chatbot.selectorLabels.frontend" . | nindent 8 }}
+      {{- if .Values.dapr.enabled }}
+      annotations:
+        {{- include "todo-chatbot.dapr.annotations.frontend" . | nindent 8 }}
+      {{- end }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: frontend
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
@@ -34,6 +42,11 @@ spec:
               value: "0.0.0.0"
             - name: PORT
               value: {{ .Values.config.frontendPort | quote }}
+            {{- if .Values.dapr.enabled }}
+            # When Dapr is enabled, frontend can use service invocation
+            - name: DAPR_BACKEND_APP_ID
+              value: {{ .Values.dapr.appId | default "todo-backend" | quote }}
+            {{- end }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.frontend.livenessProbe.tcpSocket.port }}

@@ -96,3 +96,99 @@ secrets:
   #     --from-literal=OPENAI_API_KEY='...' \
   #     --from-literal=GROQ_API_KEY='...'
   existingSecret: todo-secrets
+
+# -- Kafka (Event Backbone) ---------------------------------------------------
+# Override in values-local.yaml, values-redpanda-local.yaml, or values-production.yaml
+kafka:
+  enabled: false                # Set true in environment-specific values
+  provider: "strimzi"           # "strimzi" | "redpanda" | "external"
+  namespace: ""                 # Defaults to Release.Namespace
+  brokers: "localhost:9092"
+  version: "3.7.0"
+  replicas: 1
+  apiVersion: "2.0.0"
+
+  auth:
+    enabled: false
+    type: "password"
+    username: ""
+    mechanism: "SCRAM-SHA-256"
+    secretName: "kafka-credentials"
+    secretKey: "password"
+  tls:
+    enabled: false
+
+  storage:
+    size: "5Gi"
+    class: ""
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+  zookeeper:
+    replicas: 1
+    storage:
+      size: "2Gi"
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "250m"
+
+  redpanda:
+    cpuCores: "500m"
+
+  topics:
+    taskEvents:
+      partitions: 3
+      replicas: 1
+      retentionMs: "604800000"    # 7 days
+    taskUpdates:
+      partitions: 3
+      replicas: 1
+      retentionMs: "604800000"
+    reminders:
+      partitions: 1
+      replicas: 1
+      retentionMs: "259200000"    # 3 days
+
+# -- Dapr (Event-Driven Middleware) --------------------------------------------
+dapr:
+  enabled: false                # Set true in environment-specific values
+  appId: "todo-backend"
+  appPort: 8000
+
+  pubsub:
+    name: "pubsub-kafka"
+    consumerGroup: "todo-backend-group"
+    clientID: "todo-backend"
+    maxRetryCount: "3"
+    retryInterval: "1000ms"
+    maxMessageBytes: "1048576"
+    requiredAcks: "all"
+
+  resiliency:
+    retry:
+      maxRetries: 3
+      initialDuration: "1s"
+      maxInterval: "10s"
+    circuitBreaker:
+      maxRequests: 1
+      interval: "30s"
+      timeout: "60s"
+      tripThreshold: 5
+    timeout: "10s"
+
+# -- Image Pull Secrets (for private registries, production only) --------------
+imagePullSecrets: []
+
+# -- Ingress (disabled by default, enable in production values) ----------------
+ingress:
+  enabled: false

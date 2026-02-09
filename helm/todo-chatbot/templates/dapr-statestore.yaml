@@ -1,0 +1,52 @@
+{{- if .Values.dapr.enabled }}
+# =============================================================================
+# Dapr State Store Component — PostgreSQL (Neon Serverless)
+#
+# Provides key/value state management via Dapr sidecar API.
+# Used for: idempotency tracking, consumer offset checkpointing,
+# and transactional outbox state when needed.
+#
+# Application code accesses state via:
+#   GET  http://localhost:3500/v1.0/state/statestore-postgres/<key>
+#   POST http://localhost:3500/v1.0/state/statestore-postgres
+#
+# No PostgreSQL driver needed in app code — Dapr abstracts it.
+# =============================================================================
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: {{ .Values.dapr.stateStore.name | default "statestore-postgres" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-statestore
+spec:
+  type: state.postgresql
+  version: v1
+  metadata:
+    # Connection string from Kubernetes Secret
+    - name: connectionString
+      secretKeyRef:
+        name: {{ .Values.secrets.existingSecret }}
+        key: DATABASE_URL
+
+    # Table used by Dapr to store state (auto-created)
+    - name: tableName
+      value: {{ .Values.dapr.stateStore.tableName | default "dapr_state" }}
+
+    # Metadata table for tracking key metadata
+    - name: metadataTableName
+      value: {{ .Values.dapr.stateStore.metadataTableName | default "dapr_metadata" }}
+
+    # Cleanup interval for expired state entries
+    - name: cleanupIntervalInSeconds
+      value: {{ .Values.dapr.stateStore.cleanupInterval | default "3600" | quote }}
+
+    # Actor state support (disabled — not using Dapr actors)
+    - name: actorStateStore
+      value: "false"
+
+  # Scope to backend app only
+  scopes:
+    - {{ .Values.dapr.appId | default "todo-backend" }}
+{{- end }}

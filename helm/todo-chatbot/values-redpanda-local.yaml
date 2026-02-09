@@ -1,0 +1,92 @@
+# =============================================================================
+# Local Minikube Overrides — Redpanda (Alternative to Strimzi)
+# Lower memory footprint, no ZooKeeper dependency.
+# Usage: helm install todo-chatbot helm/todo-chatbot/ -f helm/todo-chatbot/values-redpanda-local.yaml
+# =============================================================================
+
+# -- Kafka (Redpanda, single-node, in-cluster) --------------------------------
+kafka:
+  enabled: true
+  provider: "redpanda"
+  namespace: "todo-chatbot"
+  brokers: "todo-chatbot-redpanda:9093"
+  replicas: 1
+  apiVersion: "2.0.0"
+
+  auth:
+    enabled: false
+  tls:
+    enabled: false
+
+  storage:
+    size: "5Gi"
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+  redpanda:
+    cpuCores: "500m"
+
+  # Topics managed via rpk CLI or Dapr auto-creation for Redpanda
+  topics:
+    taskEvents:
+      partitions: 3
+      replicas: 1
+      retentionMs: "604800000"
+    taskUpdates:
+      partitions: 3
+      replicas: 1
+      retentionMs: "604800000"
+    reminders:
+      partitions: 1
+      replicas: 1
+      retentionMs: "259200000"
+
+# -- Dapr Configuration (same as Strimzi) -------------------------------------
+dapr:
+  enabled: true
+  appId: "todo-backend"
+  appPort: 8000
+
+  pubsub:
+    name: "pubsub-kafka"
+    consumerGroup: "todo-backend-group"
+    clientID: "todo-backend"
+    maxRetryCount: "3"
+    retryInterval: "1000ms"
+    maxMessageBytes: "1048576"
+    requiredAcks: "all"
+
+  resiliency:
+    retry:
+      maxRetries: 3
+      initialDuration: "1s"
+      maxInterval: "10s"
+    circuitBreaker:
+      maxRequests: 1
+      interval: "30s"
+      timeout: "60s"
+      tripThreshold: 5
+    timeout: "10s"
+
+# -- Image overrides -----------------------------------------------------------
+frontend:
+  image:
+    repository: todo-frontend
+    tag: "1.0.0"
+    pullPolicy: Never
+
+backend:
+  image:
+    repository: todo-backend
+    tag: "1.0.0"
+    pullPolicy: Never
+
+config:
+  daprPubsubName: "pubsub-kafka"
+  daprHttpPort: "3500"

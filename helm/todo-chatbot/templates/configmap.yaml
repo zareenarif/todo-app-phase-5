@@ -11,3 +11,8 @@ data:
   LLM_PROVIDER: {{ .Values.config.llmProvider | quote }}
   GROQ_MODEL: {{ .Values.config.groqModel | quote }}
   NEXT_PUBLIC_API_URL: "http://{{ include "todo-chatbot.fullname" . }}-backend:{{ .Values.backend.service.port }}/api/v1"
+  {{- if .Values.dapr.enabled }}
+  # -- Dapr Event-Driven Configuration --
+  DAPR_PUBSUB_NAME: {{ .Values.config.daprPubsubName | default .Values.dapr.pubsub.name | quote }}
+  DAPR_HTTP_PORT: {{ .Values.config.daprHttpPort | default "3500" | quote }}
+  {{- end }}

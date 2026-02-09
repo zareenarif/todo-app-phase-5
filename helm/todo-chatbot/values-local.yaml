@@ -1,0 +1,102 @@
+# =============================================================================
+# Local Minikube Overrides — Strimzi Kafka + Dapr
+# Usage: helm install todo-chatbot helm/todo-chatbot/ -f helm/todo-chatbot/values-local.yaml
+# =============================================================================
+
+# -- Kafka (Strimzi, single-node, in-cluster) --------------------------------
+kafka:
+  enabled: true
+  provider: "strimzi"           # "strimzi" or "redpanda"
+  namespace: "todo-chatbot"     # Deploy Kafka in the same namespace for simplicity
+  brokers: "todo-chatbot-kafka-kafka-bootstrap:9092"
+  version: "3.7.0"
+  replicas: 1
+  apiVersion: "2.0.0"
+
+  auth:
+    enabled: false              # No auth for local development
+  tls:
+    enabled: false              # No TLS for local development
+
+  storage:
+    size: "5Gi"
+    # class: ""                 # Use default storage class on Minikube
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+  zookeeper:
+    replicas: 1
+    storage:
+      size: "2Gi"
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "250m"
+
+  topics:
+    taskEvents:
+      partitions: 3
+      replicas: 1
+      retentionMs: "604800000"    # 7 days
+    taskUpdates:
+      partitions: 3
+      replicas: 1
+      retentionMs: "604800000"    # 7 days
+    reminders:
+      partitions: 1
+      replicas: 1
+      retentionMs: "259200000"    # 3 days
+
+# -- Dapr Configuration -------------------------------------------------------
+dapr:
+  enabled: true
+  appId: "todo-backend"
+  appPort: 8000
+
+  pubsub:
+    name: "pubsub-kafka"
+    consumerGroup: "todo-backend-group"
+    clientID: "todo-backend"
+    maxRetryCount: "3"
+    retryInterval: "1000ms"
+    maxMessageBytes: "1048576"
+    requiredAcks: "all"
+
+  resiliency:
+    retry:
+      maxRetries: 3
+      initialDuration: "1s"
+      maxInterval: "10s"
+    circuitBreaker:
+      maxRequests: 1
+      interval: "30s"
+      timeout: "60s"
+      tripThreshold: 5
+    timeout: "10s"
+
+# -- Image overrides (local builds, no registry) ------------------------------
+frontend:
+  image:
+    repository: todo-frontend
+    tag: "1.0.0"
+    pullPolicy: Never
+
+backend:
+  image:
+    repository: todo-backend
+    tag: "1.0.0"
+    pullPolicy: Never
+
+# -- Dapr config vars added to ConfigMap --------------------------------------
+config:
+  daprPubsubName: "pubsub-kafka"
+  daprHttpPort: "3500"

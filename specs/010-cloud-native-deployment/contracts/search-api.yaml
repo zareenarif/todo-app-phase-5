@@ -1,0 +1,225 @@
+# Search, Filter, Sort API Contracts
+# Extended query parameters for GET /api/v1/tasks
+# Also applies to MCP list_tasks tool
+
+openapi: 3.0.3
+info:
+  title: Task Search/Filter/Sort API
+  version: 1.0.0
+
+paths:
+  /api/v1/tasks:
+    get:
+      operationId: listTasks
+      summary: List tasks with search, filter, and sort capabilities
+      tags: [tasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: >
+            Keyword search across title and description fields.
+            Case-insensitive partial match (ILIKE).
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, completed]
+          description: Filter by completion status
+        - name: priority
+          in: query
+          schema:
+            type: string
+            enum: [high, medium, low]
+          description: Filter by priority level
+        - name: tags
+          in: query
+          schema:
+            type: string
+          description: >
+            Comma-separated list of tags. Returns tasks matching
+            ANY of the specified tags.
+        - name: due_date_from
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter tasks with due_date >= this value
+        - name: due_date_to
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter tasks with due_date <= this value
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [created_at, due_date, priority, title]
+            default: created_at
+          description: Field to sort results by
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          description: Sort direction
+      responses:
+        '200':
+          description: Filtered and sorted task list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskResponse'
+
+  /api/v1/audit:
+    get:
+      operationId: listAuditLog
+      summary: Query audit log entries
+      tags: [audit]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: event_type
+          in: query
+          schema:
+            type: string
+            enum:
+              - task.created
+              - task.updated
+              - task.completed
+              - task.deleted
+              - reminder.triggered
+          description: Filter by event type
+        - name: task_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by task ID
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Filter entries from this timestamp
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Filter entries up to this timestamp
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+          description: Maximum entries to return
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+          description: Offset for pagination
+      responses:
+        '200':
+          description: Audit log entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AuditLogEntry'
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+
+components:
+  schemas:
+    TaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        completed:
+          type: boolean
+        priority:
+          type: string
+          enum: [high, medium, low]
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+        due_date:
+          type: string
+          format: date
+          nullable: true
+        recurrence:
+          type: string
+          enum: [daily, weekly, monthly]
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AuditLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+        user_id:
+          type: string
+          format: uuid
+        task_id:
+          type: string
+          format: uuid
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+        payload:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+
+# --- MCP Tool Contract Extensions ---
+# list_tasks extended parameters:
+#   search: string (keyword search)
+#   due_date_from: string (ISO date)
+#   due_date_to: string (ISO date)
+#   tags: string (comma-separated)
+#   sort: string (field name)
+#   order: string (asc/desc)

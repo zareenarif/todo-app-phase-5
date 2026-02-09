@@ -1,0 +1,67 @@
+{{- if .Values.dapr.enabled }}
+# =============================================================================
+# Dapr Pub/Sub Component — Kafka Backend
+# Abstracts all Kafka interaction via Dapr sidecar API.
+# Application code NEVER uses Kafka SDK directly (Constitution Principle XIV).
+# =============================================================================
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: {{ .Values.dapr.pubsub.name | default "pubsub-kafka" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-pubsub
+spec:
+  type: pubsub.kafka
+  version: v1
+  metadata:
+    # --- Broker Connection ---
+    - name: brokers
+      value: {{ .Values.kafka.brokers | quote }}
+    - name: consumerGroup
+      value: {{ .Values.dapr.pubsub.consumerGroup | default "todo-backend-group" }}
+    - name: clientID
+      value: {{ .Values.dapr.pubsub.clientID | default "todo-backend" }}
+
+    # --- Authentication (Cloud only — SASL/SCRAM) ---
+    {{- if .Values.kafka.auth.enabled }}
+    - name: authType
+      value: {{ .Values.kafka.auth.type | default "password" }}
+    - name: saslUsername
+      value: {{ .Values.kafka.auth.username | quote }}
+    - name: saslPassword
+      secretKeyRef:
+        name: {{ .Values.kafka.auth.secretName | default "kafka-credentials" }}
+        key: {{ .Values.kafka.auth.secretKey | default "password" }}
+    - name: saslMechanism
+      value: {{ .Values.kafka.auth.mechanism | default "SCRAM-SHA-256" }}
+    {{- end }}
+
+    # --- TLS (Cloud only) ---
+    {{- if .Values.kafka.tls.enabled }}
+    - name: disableTls
+      value: "false"
+    {{- else }}
+    - name: disableTls
+      value: "true"
+    {{- end }}
+
+    # --- Consumer Configuration ---
+    - name: maxRetryCount
+      value: {{ .Values.dapr.pubsub.maxRetryCount | default "3" | quote }}
+    - name: consumeRetryInterval
+      value: {{ .Values.dapr.pubsub.retryInterval | default "1000ms" | quote }}
+    - name: version
+      value: {{ .Values.kafka.apiVersion | default "2.0.0" | quote }}
+
+    # --- Producer Configuration ---
+    - name: maxMessageBytes
+      value: {{ .Values.dapr.pubsub.maxMessageBytes | default "1048576" | quote }}  # 1MB
+    - name: requiredAcks
+      value: {{ .Values.dapr.pubsub.requiredAcks | default "all" | quote }}
+
+  # Scope to backend app only — frontend does not publish/subscribe
+  scopes:
+    - {{ .Values.dapr.appId | default "todo-backend" }}
+{{- end }}

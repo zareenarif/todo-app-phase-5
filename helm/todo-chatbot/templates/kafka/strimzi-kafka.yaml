@@ -1,0 +1,75 @@
+{{- if and .Values.kafka.enabled (eq .Values.kafka.provider "strimzi") }}
+# =============================================================================
+# Strimzi Kafka Cluster — Local Kubernetes (Minikube)
+# Requires: Strimzi Kafka Operator installed in 'kafka' namespace
+#   helm repo add strimzi https://strimzi.io/charts/
+#   helm install strimzi-kafka-operator strimzi/strimzi-kafka-operator \
+#     --namespace kafka --create-namespace --wait
+# =============================================================================
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-kafka
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka
+spec:
+  kafka:
+    version: {{ .Values.kafka.version | default "3.7.0" }}
+    replicas: {{ .Values.kafka.replicas | default 1 }}
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+    config:
+      # Single-broker optimizations for local development
+      offsets.topic.replication.factor: {{ .Values.kafka.replicas | default 1 }}
+      transaction.state.log.replication.factor: {{ .Values.kafka.replicas | default 1 }}
+      transaction.state.log.min.isr: 1
+      default.replication.factor: {{ .Values.kafka.replicas | default 1 }}
+      min.insync.replicas: 1
+      # Retain messages for topic-specific durations (overridden per topic)
+      log.retention.hours: 168  # 7 days default
+    storage:
+      type: jbod
+      volumes:
+        - id: 0
+          type: persistent-claim
+          size: {{ .Values.kafka.storage.size | default "5Gi" }}
+          deleteClaim: true
+          {{- if .Values.kafka.storage.class }}
+          class: {{ .Values.kafka.storage.class }}
+          {{- end }}
+    resources:
+      requests:
+        memory: {{ .Values.kafka.resources.requests.memory | default "512Mi" }}
+        cpu: {{ .Values.kafka.resources.requests.cpu | default "250m" }}
+      limits:
+        memory: {{ .Values.kafka.resources.limits.memory | default "1Gi" }}
+        cpu: {{ .Values.kafka.resources.limits.cpu | default "500m" }}
+  zookeeper:
+    replicas: {{ .Values.kafka.zookeeper.replicas | default 1 }}
+    storage:
+      type: persistent-claim
+      size: {{ .Values.kafka.zookeeper.storage.size | default "2Gi" }}
+      deleteClaim: true
+      {{- if .Values.kafka.storage.class }}
+      class: {{ .Values.kafka.storage.class }}
+      {{- end }}
+    resources:
+      requests:
+        memory: {{ .Values.kafka.zookeeper.resources.requests.memory | default "256Mi" }}
+        cpu: {{ .Values.kafka.zookeeper.resources.requests.cpu | default "100m" }}
+      limits:
+        memory: {{ .Values.kafka.zookeeper.resources.limits.memory | default "512Mi" }}
+        cpu: {{ .Values.kafka.zookeeper.resources.limits.cpu | default "250m" }}
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+{{- end }}

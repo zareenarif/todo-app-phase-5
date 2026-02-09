@@ -1,14 +1,18 @@
 apiVersion: v2
 name: todo-chatbot
-description: Cloud-Native Todo AI Chatbot — Local Kubernetes Deployment
+description: Cloud-Native Event-Driven Todo AI Chatbot — Kubernetes Deployment with Kafka + Dapr
 type: application
-version: 1.0.0
-appVersion: "1.0.0"
+version: 2.0.0
+appVersion: "2.0.0"
 keywords:
   - todo
   - chatbot
   - fastapi
   - nextjs
   - mcp
+  - kafka
+  - dapr
+  - event-driven
+  - cloud-native
 maintainers:
   - name: DC

@@ -1,0 +1,51 @@
+{{- if and .Values.kafka.enabled (eq .Values.kafka.provider "redpanda") }}
+# =============================================================================
+# Redpanda Kafka-Compatible Broker — Local Kubernetes (Minikube)
+# Alternative to Strimzi. Lower resource footprint, no ZooKeeper.
+# Requires: Redpanda Operator installed
+#   helm repo add redpanda https://charts.redpanda.com
+#   helm install redpanda-operator redpanda/operator \
+#     --namespace kafka --create-namespace --wait
+# =============================================================================
+apiVersion: cluster.redpanda.com/v1alpha2
+kind: Redpanda
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-redpanda
+  namespace: {{ .Values.kafka.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: kafka
+spec:
+  chartRef: {}
+  clusterSpec:
+    statefulset:
+      replicas: {{ .Values.kafka.replicas | default 1 }}
+    resources:
+      cpu:
+        cores: {{ .Values.kafka.redpanda.cpuCores | default "500m" }}
+      memory:
+        container:
+          max: {{ .Values.kafka.resources.limits.memory | default "1Gi" }}
+        enable_memory_locking: false
+    storage:
+      persistentVolume:
+        enabled: true
+        size: {{ .Values.kafka.storage.size | default "5Gi" }}
+        {{- if .Values.kafka.storage.class }}
+        storageClass: {{ .Values.kafka.storage.class }}
+        {{- end }}
+    auth:
+      sasl:
+        enabled: false  # Disabled for local development
+    tls:
+      enabled: false    # Disabled for local development
+    listeners:
+      kafka:
+        port: 9093
+      admin:
+        port: 9644
+      schemaRegistry:
+        enabled: false
+    tuning:
+      tune_aio_events: false  # Minikube compatibility
+{{- end }}

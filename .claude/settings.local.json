@@ -185,7 +185,16 @@
       "Bash(kubectl-ai:*)",
       "Bash(minikube status:*)",
       "Bash(minikube start:*)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(wsl:*)",
+      "Bash(kubectl cluster-info:*)",
+      "Bash(helm version:*)",
+      "Bash(minikube version:*)",
+      "Bash(kind version:*)",
+      "Bash(cd C:UsersDCDesktopphase05 -todo-app -)",
+      "Bash(for file in backend/src/events/handlers.py backend/src/services/event_publisher.py backend/src/services/reminder_service.py backend/src/services/audit_service.py backend/src/services/recurrence_service.py helm/todo-chatbot/templates/dapr-statestore.yaml helm/todo-chatbot/templates/dapr-secrets.yaml helm/todo-chatbot/templates/dapr-jobs.yaml)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash([ -f \"$file\" ])"
     ]
   }
 }

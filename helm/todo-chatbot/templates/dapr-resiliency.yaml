@@ -1,0 +1,52 @@
+{{- if .Values.dapr.enabled }}
+# =============================================================================
+# Dapr Resiliency Policy — Retry + Circuit Breaker for Pub/Sub
+# Ensures event publishing does not block task operations.
+# Failed events are retried with exponential backoff before DLQ routing.
+# =============================================================================
+apiVersion: dapr.io/v1alpha1
+kind: Resiliency
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-resiliency
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: dapr-resiliency
+spec:
+  policies:
+    # --- Retry Policy ---
+    retries:
+      pubsubRetry:
+        policy: exponential
+        maxInterval: {{ .Values.dapr.resiliency.retry.maxInterval | default "10s" }}
+        maxRetries: {{ .Values.dapr.resiliency.retry.maxRetries | default 3 }}
+        duration: {{ .Values.dapr.resiliency.retry.initialDuration | default "1s" }}
+
+    # --- Circuit Breaker Policy ---
+    circuitBreakers:
+      pubsubBreaker:
+        maxRequests: {{ .Values.dapr.resiliency.circuitBreaker.maxRequests | default 1 }}
+        interval: {{ .Values.dapr.resiliency.circuitBreaker.interval | default "30s" }}
+        timeout: {{ .Values.dapr.resiliency.circuitBreaker.timeout | default "60s" }}
+        trip: consecutiveFailures > {{ .Values.dapr.resiliency.circuitBreaker.tripThreshold | default 5 }}
+
+    # --- Timeout Policy ---
+    timeouts:
+      pubsubTimeout: {{ .Values.dapr.resiliency.timeout | default "10s" }}
+
+  targets:
+    # Apply policies to the Kafka pub/sub component
+    components:
+      {{ .Values.dapr.pubsub.name | default "pubsub-kafka" }}:
+        outbound:
+          retry: pubsubRetry
+          circuitBreaker: pubsubBreaker
+          timeout: pubsubTimeout
+        inbound:
+          retry: pubsubRetry
+          timeout: pubsubTimeout
+
+  # Scope to backend app
+  scopes:
+    - {{ .Values.dapr.appId | default "todo-backend" }}
+{{- end }}
