@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-backend
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    component: backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "todo-chatbot.selectorLabels.backend" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "todo-chatbot.labels" . | nindent 8 }}
+        {{- include "todo-chatbot.selectorLabels.backend" . | nindent 8 }}
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.backend.service.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "todo-chatbot.fullname" . }}-config
+            - secretRef:
+                name: {{ .Values.secrets.existingSecret }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.backend.livenessProbe.httpGet.path }}
+              port: {{ .Values.backend.livenessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.backend.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.backend.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.backend.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.backend.readinessProbe.httpGet.path }}
+              port: {{ .Values.backend.readinessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.backend.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.backend.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.backend.readinessProbe.failureThreshold }}
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
