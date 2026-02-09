@@ -1,0 +1,98 @@
+# =============================================================================
+# Todo AI Chatbot — Helm Values
+# All deployment configuration is driven from this file.
+# Secrets are managed externally via kubectl create secret.
+# =============================================================================
+
+# -- Frontend (Next.js ChatKit UI) ------------------------------------------
+frontend:
+  replicaCount: 1
+
+  image:
+    repository: todo-frontend
+    tag: "1.0.0"
+    pullPolicy: Never    # Local images loaded via minikube image load
+
+  service:
+    type: NodePort
+    port: 3000
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  livenessProbe:
+    tcpSocket:
+      port: 3000
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 3000
+    initialDelaySeconds: 25
+    periodSeconds: 10
+    failureThreshold: 3
+
+# -- Backend (FastAPI + MCP + Agents SDK) ------------------------------------
+backend:
+  replicaCount: 1
+
+  image:
+    repository: todo-backend
+    tag: "1.0.0"
+    pullPolicy: Never    # Local images loaded via minikube image load
+
+  service:
+    type: ClusterIP
+    port: 8000
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 3
+
+# -- Application Config (non-sensitive, stored in ConfigMap) -----------------
+config:
+  corsOrigins: "http://localhost:3000"
+  debug: "False"
+  backendPort: "8000"
+  frontendPort: "3000"
+  llmProvider: "groq"
+  groqModel: "llama-3.3-70b-versatile"
+
+# -- Secrets (reference to externally created K8s Secret) --------------------
+secrets:
+  # Secret MUST be created before helm install:
+  #   kubectl create secret generic todo-secrets \
+  #     --namespace todo-chatbot \
+  #     --from-literal=DATABASE_URL='...' \
+  #     --from-literal=BETTER_AUTH_SECRET='...' \
+  #     --from-literal=OPENAI_API_KEY='...' \
+  #     --from-literal=GROQ_API_KEY='...'
+  existingSecret: todo-secrets

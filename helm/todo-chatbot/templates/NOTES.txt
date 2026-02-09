@@ -1,0 +1,31 @@
+🚀 Todo AI Chatbot deployed successfully!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NAMESPACE: {{ .Release.Namespace }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Access the frontend (ChatKit UI):
+
+   minikube service {{ include "todo-chatbot.fullname" . }}-frontend -n {{ .Release.Namespace }}
+
+   Or get the URL only:
+
+   minikube service {{ include "todo-chatbot.fullname" . }}-frontend -n {{ .Release.Namespace }} --url
+
+2. Check backend health:
+
+   kubectl exec -n {{ .Release.Namespace }} deploy/{{ include "todo-chatbot.fullname" . }}-backend -- curl -s localhost:{{ .Values.backend.service.port }}/health
+
+3. View logs:
+
+   kubectl logs -n {{ .Release.Namespace }} -l app={{ include "todo-chatbot.name" . }} --all-containers
+
+4. Check pod status:
+
+   kubectl get pods -n {{ .Release.Namespace }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For full deployment guide see: docs/deployment.md
